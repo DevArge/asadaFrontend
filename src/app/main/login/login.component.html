@@ -1,0 +1,61 @@
+<div id="login" fxLayout="column">
+
+  <div id="login-form-wrapper" fxLayout="column" fxLayoutAlign="center center">
+
+      <div id="login-form" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+
+          <div class="logo">
+              <img src="assets/images/logos/fuse.svg">
+          </div>
+
+          <div class="title">INICIAR SESIÓN</div>
+
+          <form name="loginForm" [formGroup]="loginForm" novalidate>
+
+              <mat-form-field appearance="outline"> 
+                  <mat-label>Correo</mat-label>
+                  <input matInput formControlName="email">
+                  <mat-icon matSuffix class="secondary-text">mail</mat-icon>
+                  <mat-error *ngIf="loginForm.get('email').hasError('required')">
+                      El correo es requerido
+                  </mat-error>
+                  <mat-error
+                      *ngIf="!loginForm.get('email').hasError('required') &&
+                              loginForm.get('email').hasError('email')">
+                      Por favor ingresa un correo válido
+                  </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                  <mat-label>Contraseña</mat-label>
+                  <input matInput type="password" formControlName="password">
+                  <mat-icon matSuffix class="secondary-text">vpn_key</mat-icon>
+                  <mat-error>
+                      La contraseña es requerida
+                  </mat-error>
+              </mat-form-field>
+
+              <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column"
+                   fxLayoutAlign="space-between center">
+                  <mat-checkbox class="remember-me" aria-label="Remember Me" formControlName="recuerdame">
+                      Recuerdame
+                  </mat-checkbox>
+
+                  <!-- <a class="forgot-password" [routerLink]="'/pages/auth/forgot-password'">
+                      Olvidaste tu Contraseña?
+                  </a> -->
+              </div>
+
+              <button mat-raised-button color="accent" class="submit-button" aria-label="LOG IN"
+                      [disabled]="loginForm.invalid"
+                      (click)="login()">
+                  INGRESAR
+              </button>
+
+          </form>
+
+      </div>
+
+  </div>
+
+</div>
