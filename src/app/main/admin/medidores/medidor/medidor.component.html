@@ -36,7 +36,6 @@
             <!-- / APP TITLE -->
 
             <button mat-raised-button
-                    class="save-product-button"
                     [disabled]="medidorForm.invalid || medidorForm.pristine"
                     *ngIf="detalleBtn" (click)="guardarDetalle()">
                 <span>Guardar detalle</span>
@@ -98,7 +97,8 @@
                           
                                   <mat-table [dataSource]="dataSource" 
                                               matSort fusePerfectScrollbar 
-                                              [@animateStagger]="{value:'50'}">
+                                              [@animateStagger]="{value:'50'}"
+                                              (matSortChange)="ordenarColumna($event)">
 
                                     <!-- Name Column -->
                                     <ng-container matColumnDef="costoTotal">

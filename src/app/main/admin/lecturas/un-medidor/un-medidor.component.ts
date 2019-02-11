@@ -1,40 +1,44 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations/index';
 import { MatTableDataSource } from '@angular/material';
 import { Subject } from 'rxjs';
-import { fuseAnimations } from '@fuse/animations/index';
-import { LecturaService } from '../../../services/lectura.service';
+import { LecturaService } from '../../../../services/lectura.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-lecturas',
-  templateUrl: './lecturas.component.html',
-  styleUrls: ['./lecturas.component.scss'],
+  selector: 'app-un-medidor',
+  templateUrl: './un-medidor.component.html',
+  styleUrls: ['./un-medidor.component.scss'],
   animations   : fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class LecturasComponent implements OnInit {
+export class UnMedidorComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre', 'apellido1', 'apellido2','detalle', 'medidor', 'lecturaAnt', 'lectura', 'metros', 'promedio'];
+  displayedColumns: string[] = ['nombre', 'apellido1', 'apellido2','detalle', 'lectura', 'metros', 'periodo'];
   dataSource: MatTableDataSource<any>;
   estaCargando:boolean = true;
   huboErrorAlcargar:boolean = false;
   desde:number = 0;
   cantidad:number = 10;
-  columna:string = 'id';
-  orden:string = 'asc';
+  columna:string = 'periodo';
+  orden:string = 'desc';
   lecturas:any[] = [];
   total:number = 0;
   sinRegistrar:number = 0;
   termino = new Subject<string>();
-  periodo:string;
+  idMedidor:string;
   lectura:number;
+  nombre:string;
+  apellido1:string;
+  apellido2:string;
 
   constructor(private _lecturaService:LecturaService, private route:ActivatedRoute, private router:Router) { 
-    this.route.params.subscribe(params => this.periodo = params.periodo)
-    if (!this.periodo) {
-      this.router.navigate(['admin/seleccionar-periodo/lecturas']);
+    this.route.params.subscribe(params => this.idMedidor = params.id)
+    if (!this.idMedidor) {
+      this.router.navigate(['admin/seleccionar-medidor/lecturas']);
+    }else{
+      this.buscarLectura();
     }
-    this.buscarLectura();
   }
 
   ngOnInit() {
@@ -43,7 +47,7 @@ export class LecturasComponent implements OnInit {
 
   cargarLecturas(){
     this.estaCargando = true;
-    this._lecturaService.obtenerLecturas(this.desde, this.cantidad, this.columna, this.orden, this.periodo)
+    this._lecturaService.obtenerLecturasDeUnMedidor(this.desde, this.cantidad, this.columna, this.orden, this.idMedidor)
       .subscribe((resp:any) =>{
         this.sinRegistrar = resp.sinRegistrar;
         this.total = resp.total;
@@ -62,7 +66,7 @@ export class LecturasComponent implements OnInit {
   buscarLectura(){
     this.desde = 0;
     this.estaCargando = true;
-    this._lecturaService.buscarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.termino,'periodo', 'lecturas', this.periodo)
+    this._lecturaService.buscarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.termino,'idMedidor', 'ver', null, this.idMedidor)
       .subscribe((resp:any) =>{
         this.total = resp.total;
         this.lecturas = resp.lecturas;
@@ -73,8 +77,8 @@ export class LecturasComponent implements OnInit {
 
   ordenarColumna(evento:any){
     if (evento.direction == '') {
-      this.columna = 'id';
-      this.orden = 'asc';
+      this.columna = 'periodo';
+      this.orden = 'desc';
     }else{
       this.columna = evento.active;
       this.orden = evento.direction;

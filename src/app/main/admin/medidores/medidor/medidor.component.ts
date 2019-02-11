@@ -39,12 +39,11 @@ export class MedidorComponent implements OnInit {
               private _medidorService:MedidorService) { 
     if (localStorage.getItem('medidor')) {
       this.medidor = JSON.parse(localStorage.getItem('medidor'))
+      localStorage.removeItem('medidor');
       this.medidorForm = this.createMedidorForm();
       this._tipoMedidorService.obtenerTiposDeMedidor().subscribe((res:any)=>{
         this.tiposDeMedidores = res.tiposDeMedidores;
       })
-      console.log(this.medidor);
-      
     }else{
       this.router.navigate(['/admin/medidores']);
     }
@@ -141,8 +140,8 @@ export class MedidorComponent implements OnInit {
 
   ordenarColumna(evento:any){
     if (evento.direction == '') {
-      this.columna = 'id';
-      this.orden = 'asc';
+      this.columna = 'created_at';
+      this.orden = 'desc';
     }else{
       this.columna = evento.active;
       this.orden = evento.direction;

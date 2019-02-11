@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MatButtonModule, MatIconModule, MatInputModule, MatCheckboxModule, MatFormFieldModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatToolbarModule } from '@angular/material';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
 
@@ -20,12 +20,14 @@ import { APP_ROUTES } from './app.routes';
 import { HomeComponent } from './main/home/home.component';
 import { LoginComponent } from './main/login/login.component';
 import { ConsultaComponent } from './main/consulta/consulta.component';
+
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
         LoginComponent,
         ConsultaComponent,
+        
     ],
     imports     : [
         BrowserModule,
@@ -44,6 +46,7 @@ import { ConsultaComponent } from './main/consulta/consulta.component';
         MatCheckboxModule,
         MatFormFieldModule,
         MatInputModule,
+        MatToolbarModule,
 
         // Fuse modules
         FuseModule.forRoot(fuseConfig),

@@ -1,0 +1,45 @@
+
+<div class="content width-100">
+
+    <!-- PRICE TABLES -->
+    <div class="price-tables height-100" fxLayout="row wrap" fxLayoutAlign="center center">
+
+        <div class="price-table style-1 mat-elevation-z12 periodo-container" fxLayout="column">
+
+            <div class="package-type accent">
+                <span>SELECCIONE EL PERIODO</span>
+            </div>
+            <form name="periodoForm" novalidate [formGroup]="periodoForm">
+
+                <div class="terms" fxLayout="column"><br><br>
+                    <div class="term">
+                        <mat-form-field appearance="outline" class="bloque">
+                            <mat-label>Seleccione el Mes</mat-label>
+                            <mat-icon matSuffix class="secondary-text">calendar_today</mat-icon>
+                            <mat-select #select name="mes" formControlName="mes">
+                                <mat-option *ngFor="let valor of mes; let i = index" [value]="i+1">{{valor}}</mat-option>
+                            </mat-select>
+                            <mat-error>El Mes es requerido!</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="term">
+                        <mat-form-field appearance="outline" class="bloque">
+                            <mat-label>Seleccione el Año</mat-label>
+                            <mat-icon matSuffix class="secondary-text">calendar_today</mat-icon>
+                            <mat-select #select name="anio" formControlName="anio">
+                                <mat-option *ngFor="let valor of anio" [value]="valor">{{valor}}</mat-option>
+                            </mat-select>
+                            <mat-error>El Año es requerido!</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+            </form>
+            <button mat-raised-button color="accent" type="button" class="cta-button" aria-label="LOG IN" [disabled]="periodoForm.invalid || periodoForm.pristine"
+                (click)="enviarPeriodo()">
+                SIGUIENTE
+            </button>
+        </div>
+    </div>
+</div>

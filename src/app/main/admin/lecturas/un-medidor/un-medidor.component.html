@@ -7,47 +7,50 @@
   <!-- CENTER -->
   <div class="center">
 
-    <!-- HEADER -->
-    <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
-      <!-- APP TITLE -->
-      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
-        <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/admin/seleccionar-periodo/lecturas-todas'">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-          dvr
-        </mat-icon>
-        <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-          Lecturas de {{periodo | periodo }}
-        </span>
-      </div>
-      <!-- / APP TITLE -->
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
 
-      <!-- SEARCH -->
-      <div class="search-wrapper mx-32 mx-md-0">
-        <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
-          <mat-icon>search</mat-icon>
-          <input #buscar placeholder="Buscar Abonado" (keyup)="termino.next(buscar.value)">
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/admin/seleccionar-medidor/lecturas'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div class="product-image mr-8 mr-sm-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    <!-- <img src="./assets/images/avatars/profile.jpg" class="avatar contact-avatar huge m-0" [alt]="abonado.nombre" /> -->
+                    <img src="./assets/images/avatars/profile.jpg" class="avatar contact-avatar huge m-0" />
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+
+                    <div class="h2">
+                        Medidor: #{{idMedidor}}
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                  <mat-menu #appMenu="matMenu">
+                    <button mat-menu-item>Exportar a excel</button>
+                    <button mat-menu-item>Help</button>
+                  </mat-menu>
+        
+                  <button mat-icon-button [matMenuTriggerFor]="appMenu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </span>
+              </div>
+
+
         </div>
-      </div>
-      <!-- / SEARCH -->
-
-      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
-        <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-          <mat-menu #appMenu="matMenu">
-            <button mat-menu-item>Exportar a excel</button>
-            <button mat-menu-item>Help</button>
-          </mat-menu>
-
-          <button mat-icon-button [matMenuTriggerFor]="appMenu">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-        </span>
-      </div>
-
-    </div>
-    <!-- / HEADER -->
+        <!-- / HEADER -->
 
 
 
@@ -89,41 +92,21 @@
         </ng-container>
 
         <!-- Color Column -->
-        <ng-container matColumnDef="medidor">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Medidor </mat-header-cell>
-          <mat-cell *matCellDef="let row"> #{{row.medidor}} </mat-cell>
-        </ng-container>
-
-        <!-- Color Column -->
-        <ng-container matColumnDef="lecturaAnt">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Lectura anterior </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <div *ngIf="!row.lecturaAnt"> 0 </div>
-            <div *ngIf="row.lecturaAnt">{{row.lecturaAnt}} ³</div>
-          </mat-cell>
-        </ng-container>
-
-        <!-- Color Column -->
         <ng-container matColumnDef="lectura">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Lectura actual</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Lectura</mat-header-cell>
           <mat-cell *matCellDef="let row"> {{row.lectura}} ³</mat-cell>
         </ng-container>
 
         <!-- Color Column -->
         <ng-container matColumnDef="metros">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Metros </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span [ngClass]="{'warn-700-fg': row.metros > row.promedio}">
-              <strong *ngIf="row.metros > row.promedio">{{row.metros}} ³</strong>
-              <div *ngIf="row.metros <= row.promedio">{{row.metros}} ³</div>
-            </span>
-          </mat-cell>
+          <mat-cell *matCellDef="let row"> {{row.metros}} ³</mat-cell>
         </ng-container>
 
         <!-- Color Column -->
-        <ng-container matColumnDef="promedio">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Promedio 3 meses </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.promedio}} ³</mat-cell>
+        <ng-container matColumnDef="periodo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Periodo </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.periodo | periodo}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>

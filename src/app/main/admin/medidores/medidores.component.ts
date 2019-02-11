@@ -48,7 +48,6 @@ export class MedidoresComponent implements OnInit {
     this.estaCargando = true;
     this._medidorService.obtenerMedidores(this.desde, this.cantidad, this.columna, this.orden, this.todos)
       .subscribe((resp:any) =>{
-        console.log(resp);
         this.total = resp.total;
         this.medidores = resp.medidores;
         this.dataSource = new MatTableDataSource(this.medidores);
@@ -110,7 +109,6 @@ export class MedidoresComponent implements OnInit {
   }
 
   editarMedidor(medidor:any){
-    console.log(medidor);
     localStorage.setItem('medidor', JSON.stringify(medidor));
     this.router.navigate(['admin/medidor/' + medidor.medidor]);
   }
@@ -150,7 +148,6 @@ export class MedidoresComponent implements OnInit {
     this.estaCargando = true;
     this._medidorService.buscarMedidores(this.desde, this.cantidad, this.columna, this.orden, this.termino, this.todos)
       .subscribe((resp:any) =>{
-        console.log(resp); 
         this.total = resp.total;
         this.medidores = resp.medidores;
         this.dataSource = new MatTableDataSource(this.medidores);

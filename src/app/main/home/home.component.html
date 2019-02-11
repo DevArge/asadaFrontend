@@ -1,3 +1,24 @@
-<p>
-  home works!
-</p>
+<div class="page-layout simple fullwidth">
+
+    <mat-toolbar color="accent">  
+      <button mat-button routerLink="/">
+        <mat-icon>home</mat-icon> 
+            home</button>
+    
+        <!-- This fills the remaining space of the current row -->
+        <span class="fill-remaining-space"></span>
+        <div fxLayout="row" fxShow="false" fxShow.gt-sm>
+            <button mat-button routerLink="/consulta">Cosulta</button>
+            <button mat-button routerLink="/login">Login</button>
+        </div>
+  
+    </mat-toolbar>
+
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+        
+    </div>
+    <!-- / CONTENT -->
+
+</div>

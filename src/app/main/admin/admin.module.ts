@@ -19,6 +19,13 @@ import { AbonadoComponent } from './abonados/abonado/abonado.component';
 import { CrearMedidorComponent } from './medidores/crear-medidor/crear-medidor.component';
 import { BuscarMedidorComponent } from './medidores/buscar-medidor/buscar-medidor.component';
 import { AnadirReparacionComponent } from './medidores/anadir-reparacion/anadir-reparacion.component';
+import { PeriodoComponent } from './periodo/periodo.component';
+import { UnMedidorComponent } from './lecturas/un-medidor/un-medidor.component';
+import { InsertarLecturaComponent } from './lecturas/insertar-lectura/insertar-lectura.component';
+import { PeriodoPipe } from '../../pipes/periodo.pipe';
+import { SeleccionarMedidorComponent } from './seleccionar-medidor/seleccionar-medidor.component';
+import { ReciboComponent } from './recibos/recibo/recibo.component';
+import { RecibosUnMedidorComponent } from './recibos/recibos-un-medidor/recibos-un-medidor.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +40,13 @@ import { AnadirReparacionComponent } from './medidores/anadir-reparacion/anadir-
     CrearMedidorComponent,
     BuscarMedidorComponent,
     AnadirReparacionComponent,
+    PeriodoComponent,
+    UnMedidorComponent,
+    SeleccionarMedidorComponent,
+    InsertarLecturaComponent,
+    PeriodoPipe,
+    ReciboComponent,
+    RecibosUnMedidorComponent,
   ],
   imports: [
     CommonModule,
