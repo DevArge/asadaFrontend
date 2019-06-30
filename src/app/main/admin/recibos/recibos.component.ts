@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations/index';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReciboService } from '../../../services/recibo.service';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-recibos',
@@ -12,7 +13,7 @@ import { ReciboService } from '../../../services/recibo.service';
   animations   : fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class RecibosComponent implements OnInit {
+export class RecibosComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['nombre', 'apellido1', 'apellido2','detalle', 'medidor', 'total', 'estado','acciones'];
   dataSource: MatTableDataSource<any>;
@@ -27,10 +28,11 @@ export class RecibosComponent implements OnInit {
   sinRegistrar:number = 0;
   termino = new Subject<string>();
   periodo:string;
-  fechaVencimiento:Date;
+  fechaVencimiento:Date = null;
+  subcripciones:Subscription [] = [];
 
   constructor(private route:ActivatedRoute, private router:Router, private _reciboService:ReciboService) { 
-    this.route.params.subscribe(params => this.periodo = params.periodo)
+    this.subcripciones.push( this.route.params.subscribe(params => this.periodo = params.periodo))
     if (!this.periodo) {
       this.router.navigate(['admin/seleccionar-periodo/recibos']);
     }
@@ -41,20 +43,27 @@ export class RecibosComponent implements OnInit {
     this.cargarRecibos();
   }
 
+  ngOnDestroy(){
+    this.subcripciones.forEach(sub => sub.unsubscribe())
+  }
+
   cargarRecibos(){
     this.estaCargando = true;
-    this._reciboService.cargarRecibos(this.desde, this.cantidad, this.columna, this.orden, this.periodo)
+    this.subcripciones.push( this._reciboService.cargarRecibos(this.desde, this.cantidad, this.columna, this.orden, this.periodo)
       .subscribe((resp:any) =>{
         this.sinRegistrar = resp.sinRegistrar;
         this.total = resp.total;
         this.recibos = resp.recibos;
-        this.fechaVencimiento = this.recibos[0].vence;
+        if (this.recibos[0]) {
+          this.fechaVencimiento = this.recibos[0].vence;
+        }
         this.dataSource = new MatTableDataSource(this.recibos);
         this.estaCargando = false;
       }, err=>{
         this.huboErrorAlcargar = true;
         this.estaCargando = false;
-      });
+      })
+    )
   }
 
   verDetalle(recibo:any){
@@ -76,13 +85,14 @@ export class RecibosComponent implements OnInit {
     })
       .then((willDelete) => {
         if (willDelete) {
-          this._reciboService.eliminarRecibo(recibo.id).subscribe((res)=>{
-            if (res) {
-              this.cargarRecibos();
-            }
-          }, err=>{
-            console.log(err);
-          })
+          this.subcripciones.push( this._reciboService.eliminarRecibo(recibo.id).subscribe((res)=>{
+              if (res) {
+                this.cargarRecibos();
+              }
+            }, err=>{
+              console.log(err);
+            })
+          )
         } else {
           swal("Aviso", "El registro no sufrio cambios!", "info");
         }
@@ -106,11 +116,12 @@ export class RecibosComponent implements OnInit {
         swal('Aviso', 'No se ha realizado ningún cambio','info');
       }else{
         console.log(value);
-        this._reciboService.actualizarFecha(this.periodo, value).subscribe(res=>{
-          this.cargarRecibos();
-        },err=>{
-          console.log(err);
-        })
+        this.subcripciones.push( this._reciboService.actualizarFecha(this.periodo, value).subscribe(res=>{
+            this.cargarRecibos();
+          },err=>{
+            console.log(err);
+          })
+        )
       }
     });
   }
@@ -120,13 +131,14 @@ export class RecibosComponent implements OnInit {
   buscarLectura(){
     this.desde = 0;
     this.estaCargando = true;
-    this._reciboService.buscarRecibos(this.desde, this.cantidad, this.columna, this.orden, this.termino,'periodo', this.periodo)
+    this.subcripciones.push( this._reciboService.buscarRecibos(this.desde, this.cantidad, this.columna, this.orden, this.termino,'periodo', this.periodo)
       .subscribe((resp:any) =>{
         this.total = resp.total;
         this.recibos = resp.recibos;
         this.dataSource = new MatTableDataSource(this.recibos);
         this.estaCargando = false;
-      });   
+      })
+    ) 
   }
 
   ordenarColumna(evento:any){

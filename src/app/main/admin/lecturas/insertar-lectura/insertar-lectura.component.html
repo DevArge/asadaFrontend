@@ -79,7 +79,7 @@
                 <!-- Color Column -->
                 <ng-container matColumnDef="medidor">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Medidor </mat-header-cell>
-                    <mat-cell *matCellDef="let row" (click)="agregarNota(row)"> {{row.medidor}} </mat-cell>
+                    <mat-cell *matCellDef="let row" (click)="agregarNota(row)"> #{{row.medidor}} </mat-cell>
                 </ng-container>
 
                 <!-- Color Column -->

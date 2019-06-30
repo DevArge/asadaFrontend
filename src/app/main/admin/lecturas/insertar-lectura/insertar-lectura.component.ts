@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations/index';
 import { MatTableDataSource } from '@angular/material';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { LecturaService } from '../../../../services/lectura.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert';
@@ -13,7 +13,7 @@ import swal from 'sweetalert';
   animations   : fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class InsertarLecturaComponent implements OnInit {
+export class InsertarLecturaComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['nombre', 'apellido1', 'apellido2','detalle', 'medidor', 'lecturaAnt', 'lectura'];
   dataSource: MatTableDataSource<any>;
@@ -30,6 +30,8 @@ export class InsertarLecturaComponent implements OnInit {
   periodo:string;
   lectura:number;
 
+  subcripciones:Subscription [] = [];
+
   constructor(private _lecturaService:LecturaService, private route:ActivatedRoute, private router:Router) { 
     this.route.params.subscribe(params => this.periodo = params.periodo)
     if (!this.periodo) {
@@ -42,9 +44,13 @@ export class InsertarLecturaComponent implements OnInit {
     this.cargarLecturas();
   }
 
+  ngOnDestroy(){
+    this.subcripciones.forEach(sub => sub.unsubscribe())
+  }
+
   cargarLecturas(){
     this.estaCargando = true;
-    this._lecturaService.obtenerInsertarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.periodo)
+    this.subcripciones.push( this._lecturaService.obtenerInsertarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.periodo)
       .subscribe((resp:any) =>{
         this.sinRegistrar = resp.sinRegistrar;
         this.total = resp.total;
@@ -54,7 +60,8 @@ export class InsertarLecturaComponent implements OnInit {
       }, err=>{
         this.huboErrorAlcargar = true;
         this.estaCargando = false;
-      });
+      })
+    )
   }
 
   agregarNota(row:any){
@@ -78,11 +85,12 @@ export class InsertarLecturaComponent implements OnInit {
       if (value == row.nota || value == '' || value == null) {
         swal('Aviso', 'No se ha realizado ningún cambio','info');
       }else{
-        this._lecturaService.guardarLectura(row.medidor, row.lectura, this.periodo, value).subscribe(res=>{
+        this.subcripciones.push( this._lecturaService.guardarLectura(row.medidor, row.lectura, this.periodo, value).subscribe(res=>{
           this.cargarLecturas();
           },err=>{
 
           })
+        )
       }
     });
     
@@ -100,15 +108,16 @@ export class InsertarLecturaComponent implements OnInit {
     }else if (lectura < 0) {
       return;
     }else{
-      this._lecturaService.guardarLectura(row.medidor, lectura.value, this.periodo, row.nota).subscribe(res=>{
-      this.cargarLecturas(); 
-      },err=>{
-        if (!this.lectura) {
-          lectura.value = '';
-        }else{
-          lectura.value = this.lectura;
-        }
-      })
+      this.subcripciones.push( this._lecturaService.guardarLectura(row.medidor, lectura.value, this.periodo, row.nota).subscribe(res=>{
+        this.cargarLecturas(); 
+        },err=>{
+          if (!this.lectura) {
+            lectura.value = '';
+          }else{
+            lectura.value = this.lectura;
+          }
+        })
+      )
     }
   }
 
@@ -117,13 +126,14 @@ export class InsertarLecturaComponent implements OnInit {
    buscarLectura(){
     this.desde = 0;
     this.estaCargando = true;
-    this._lecturaService.buscarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.termino,'periodo', 'insertar',this.periodo)
+    this.subcripciones.push( this._lecturaService.buscarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.termino,'periodo', 'insertar',this.periodo)
       .subscribe((resp:any) =>{
         this.total = resp.total;
         this.lecturas = resp.lecturas;
         this.dataSource = new MatTableDataSource(this.lecturas);
         this.estaCargando = false;
-      });   
+      })
+    ) 
   }
 
   ordenarColumna(evento:any){

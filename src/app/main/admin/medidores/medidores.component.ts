@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations/index';
-import { Abonado } from '../../../models/Abonado.model';
 import { Medidor } from '../../../models/Medidor.model';
 import { MedidorService } from '../../../services/medidor.service';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { AnadirReparacionComponent } from './anadir-reparacion/anadir-reparacion.component';
@@ -18,7 +17,7 @@ import { DeudaService } from '../../../services/deuda.service';
   animations   : fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class MedidoresComponent implements OnInit {
+export class MedidoresComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['nombre', 'apellido1', 'apellido2', 'detalle', 'medidor', 'estado', 'editar'];
   dataSource: MatTableDataSource<Medidor>;
@@ -34,6 +33,7 @@ export class MedidoresComponent implements OnInit {
   total:number = 0;
   termino = new Subject<string>();
   todos:boolean = false;
+  subcripciones:Subscription [] = [];
 
   constructor(private _medidorService:MedidorService, private router:Router, 
               public _matDialog:MatDialog, private _deudaService:DeudaService) { 
@@ -44,9 +44,13 @@ export class MedidoresComponent implements OnInit {
     this.cargarMedidores();
   }
 
+  ngOnDestroy(){
+    this.subcripciones.forEach(sub => sub.unsubscribe())
+  }
+
   cargarMedidores(){
     this.estaCargando = true;
-    this._medidorService.obtenerMedidores(this.desde, this.cantidad, this.columna, this.orden, this.todos)
+    this.subcripciones.push( this._medidorService.obtenerMedidores(this.desde, this.cantidad, this.columna, this.orden, this.todos)
       .subscribe((resp:any) =>{
         this.total = resp.total;
         this.medidores = resp.medidores;
@@ -55,7 +59,8 @@ export class MedidoresComponent implements OnInit {
       }, err=>{
         this.huboErrorAlcargar = true;
         this.estaCargando = false;
-      });
+      })
+    )
   }
 
   inhabilitarMedidor(medidor:any){
@@ -72,19 +77,20 @@ export class MedidoresComponent implements OnInit {
     this.dialogRef = this._matDialog.open(AnadirReparacionComponent, {
       panelClass: 'abonado-form-dialog'
     });
-    this.dialogRef.afterClosed()
+    this.subcripciones.push( this.dialogRef.afterClosed()
       .subscribe((response: FormGroup) => {
           if ( !response ){
               return;
           }
-          console.log(response.getRawValue());
-          this._deudaService.anadirReparacion(medidor.medidor, response.getRawValue()).subscribe(
+          this.subcripciones.push( this._deudaService.anadirReparacion(medidor.medidor, response.getRawValue()).subscribe(
             res=>{
 
             },err=>{
               console.log(err);
-            });
-      });
+            })
+          )
+      })
+    )
   }
 
   cambiarMedidor(medidor:any){
@@ -98,10 +104,11 @@ export class MedidoresComponent implements OnInit {
     })
     .then((willDelete) => {
       if (willDelete) {
-        this._medidorService.inhabilitarMedidor(medidor.medidor).subscribe((res)=>{
-          localStorage.setItem('abonado', JSON.stringify(medidor));
-          this.router.navigate(['admin/asignar-medidor']);
-        })
+        this.subcripciones.push( this._medidorService.inhabilitarMedidor(medidor.medidor).subscribe((res)=>{
+            localStorage.setItem('abonado', JSON.stringify(medidor));
+            this.router.navigate(['admin/asignar-medidor']);
+          })
+        )
       } else {
         swal("La acción no se realizo!", "", "info");
       }
@@ -123,9 +130,10 @@ export class MedidoresComponent implements OnInit {
     })
     .then((willDelete) => {
       if (willDelete) {
-        funcion.subscribe((res)=>{
-          this.cargarMedidores();
-        })
+        this.subcripciones.push( funcion.subscribe((res)=>{
+            this.cargarMedidores();
+          })
+        )
       } else {
         swal("El registro no sufrio cambios!", "", "info");
       }
@@ -146,13 +154,14 @@ export class MedidoresComponent implements OnInit {
   buscarMedidor(){
     this.desde = 0;
     this.estaCargando = true;
-    this._medidorService.buscarMedidores(this.desde, this.cantidad, this.columna, this.orden, this.termino, this.todos)
+    this.subcripciones.push( this._medidorService.buscarMedidores(this.desde, this.cantidad, this.columna, this.orden, this.termino, this.todos)
       .subscribe((resp:any) =>{
         this.total = resp.total;
         this.medidores = resp.medidores;
         this.dataSource = new MatTableDataSource(this.medidores);
         this.estaCargando = false;
-      });   
+      })
+    ) 
   }
 
   ordenarColumna(evento:any){

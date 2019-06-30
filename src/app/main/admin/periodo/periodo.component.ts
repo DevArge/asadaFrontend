@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations/index';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-periodo',
@@ -16,14 +17,19 @@ export class PeriodoComponent implements OnInit {
   anio:any[] = [];
   periodoForm:FormGroup;
   ruta:string;
+  subscribe:Subscription;
 
   constructor(private _formBuilder: FormBuilder, private route:ActivatedRoute, private router:Router) { 
     this.periodoForm = this.createForm();
     this.obtenerAnios();
-    this.route.params.subscribe( params => this.ruta = params.ruta );
+    this.subscribe = this.route.params.subscribe( params => this.ruta = params.ruta );
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(): void {
+    this.subscribe.unsubscribe();    
   }
 
   createForm():FormGroup{
@@ -48,6 +54,8 @@ export class PeriodoComponent implements OnInit {
       this.router.navigate(['admin/lecturas/' + periodo]); 
     }else if (this.ruta == 'recibos') {
       this.router.navigate(['admin/recibos/' + periodo]);       
+    }else if(this.ruta == 'cuentas'){
+      this.router.navigate(['admin/cuentas-por-cobrar/' + periodo]);
     }else{
       this.router.navigate(['admin/']); 
     }

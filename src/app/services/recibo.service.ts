@@ -20,6 +20,11 @@ export class ReciboService {
     return this.http.get(url); 
   }
 
+  cargarRecibosUnMedidor(desde:number, cantidad:number, columna:string, orden:string, idMedidor:string){
+    let url = URL_SERVICIOS + `/api/recibos/medidor/${idMedidor}?desde=${desde}&cantidad=${cantidad}&columna=${columna}&orden=${orden}&token=${this._usuarioService.token}`;
+    return this.http.get(url); 
+  }
+
   buscarRecibos(desde:number, cantidad:number, columna:string, orden:string, termino: Observable<string>,  tipo:string, periodo:string = null, idMedidor:string = null){
     let params = '';
     if (periodo == null) {
@@ -38,7 +43,7 @@ export class ReciboService {
   }
 
   pagarRecibo(id:String){
-    let url = URL_SERVICIOS + `/api/recibo/${id}`;
+    let url = URL_SERVICIOS + `/api/recibo/${id}?token=${this._usuarioService.token}`;
     return this.http.put(url, {}).pipe(
       map(res=>{
         swal('Acción realizada!', 'Recibo pagado correctamente', 'success');
@@ -52,7 +57,7 @@ export class ReciboService {
   }
 
   eliminarRecibo(id:string){
-    let url = URL_SERVICIOS + '/api/recibo/' + id;
+    let url = URL_SERVICIOS + '/api/recibo/' + id + '?token=' + this._usuarioService.token;
     return this.http.delete(url).pipe(
       map((res:any)=>{
         if (!res.ok) {

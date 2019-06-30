@@ -1,0 +1,154 @@
+<div class="page-layout carded fullwidth">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- CONTENT HEADER -->
+    <div iv class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/admin/facturas-de-cuentas'">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h2 class="m-0">Detalle de Factura</h2>
+      </div>
+
+      <div *ngIf="factura">
+        <button mat-raised-button (click)="guardarFactura()" *ngIf="!factura.id" [disabled]="facturaForm.invalid || validar()" class="add-product-button fuse-white mt-24 mt-md-0">
+          <mat-icon>person_add</mat-icon>
+          <span> Guardar</span>
+        </button>
+
+        <button mat-raised-button (click)="actualizarFactura()" *ngIf="factura.id" [disabled]="facturaForm.invalid || validar()" class="add-product-button fuse-white mt-24 mt-md-0">
+          <mat-icon>person_add</mat-icon>
+          <span> Actualizar</span>
+        </button>
+      </div>
+    </div>
+    <!-- / CONTENT HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+
+      <!-- CONTENT TOOLBAR -->
+      <div class="toolbar px-24 py-8">
+        <span>Factura</span>
+      </div>
+      <!-- / CONTENT TOOLBAR -->
+
+      <!-- CONTENT -->
+      <div class="content p-24">
+
+        <div fxLayout="row" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" *ngIf="factura">
+
+          <form [formGroup]="facturaForm" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+              <mat-form-field appearance="outline" fxFlex="33">
+                <mat-label>Número de Factura</mat-label>
+                <input matInput formControlName="numero" required>
+                <mat-icon matSuffix class="secondary-text">location_city</mat-icon>
+                <mat-error>Numero de Factura es requerido!</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" floatLabel="always" class="px-8" fxFlex="33">
+                <mat-label>Cuenta:</mat-label>
+                <mat-select formControlName="idCuenta" placeholder="Seleccione una opción">
+                    <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.id">
+                        {{cuenta.codigo + ' - ' + cuenta.nombre }}
+                    </mat-option>
+                </mat-select>
+                <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
+                <mat-error>La cuenta es requerida!</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="33">
+                <input matInput [matDatepicker]="picker1" formControlName="fecha" type="date"
+                name="fechaInicio" placeholder="Selecciona la fecha en el icono" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker touchUi #picker1></mat-datepicker>
+              </mat-form-field>
+
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+              <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Descripción de la Factura</mat-label>
+                <input matInput formControlName="descripcion" required>
+                <mat-icon matSuffix class="secondary-text">location_city</mat-icon>
+                <mat-error>La descripción es requerida!</mat-error>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+        <div fxLayout="row" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+          <table class="table table-bordered table-form" *ngIf="factura">
+            <thead>
+              <tr>
+                <th class="table-name">Nombre del producto</th>
+                <th class="table-price">Precio</th>
+                <th class="table-qty">Cantidad</th>
+                <th class="table-total">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let detalle of factura.productos; let i = index;">
+                <td><input type="text" [value]="detalle.nombre" [(ngModel)]="factura.productos[i].nombre"
+                    class="input-table"></td>
+                <td><input type="number" [value]="detalle.precio" [(ngModel)]="factura.productos[i].precio"
+                    class="input-table-2"></td>
+                <td><input type="number" [value]="detalle.cantidad" [(ngModel)]="factura.productos[i].cantidad"
+                    class="input-table-2"></td>
+                <td class="table-total">{{factura.productos[i].precio * factura.productos[i].cantidad}}</td>
+                <td class="table-remove">
+                  <span class="table-remove-btn" (click)="eliminarProducto(i)">×</span>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td class="table-empty" colspan="2">
+                  <a (click)="agregarLinea()" class="table-add_line">
+                    <mat-icon>add_circle_outline</mat-icon>
+                    <span class="agregarProducto"> Añadir un nuevo Producto.</span>
+                  </a>
+                </td>
+                <td class="table-label" style="text-align: center;"><b>Sub-Total</b></td>
+                <td class="table-amount" style="text-align: center;">{{calcularSubtotal()}}</td>
+              </tr>
+
+              <tr>
+                <td class="table-empty" colspan="2"></td>
+                <td class="table-label" style="text-align: center;"><b>Descuento</b></td>
+                <td class="table-discount" :class="{'table-error': errors.discount}">
+                  <input type="number" class="table-discount_input" [(ngModel)]="factura.descuento"
+                    style="text-align: center;">
+                </td>
+              </tr>
+
+              <tr>
+                <td class="table-empty" colspan="2"></td>
+                <td class="table-label" style="text-align: center;"><b>Total</b></td>
+                <td class="table-amount" style="text-align: center;"><strong>{{calcularTotal()}}</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+
+
+        </div>
+
+      </div>
+      <!-- / CONTENT -->
+
+    </div>
+    <!-- / CONTENT CARD -->
+
+  </div>
+  <!-- / CENTER -->
+
+</div>

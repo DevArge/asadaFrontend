@@ -1,0 +1,297 @@
+<div id="product" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    group
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Configuración
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button [ngClass]="{'boton-none': currentTab != 'Valor del metro'}"
+                [disabled]="preciosForm.invalid || preciosForm.pristine" (click)="guardarMetros()">
+                <span>Guardar Metros</span>
+            </button>
+
+            <button mat-raised-button [ngClass]="{'boton-none': currentTab != 'Impuestos'}"
+                [disabled]="impuestosForm.invalid || impuestosForm.pristine" (click)="guardarImpuestos()">
+                <span>Guardar Impuestos</span>
+            </button>
+
+            <button mat-raised-button [ngClass]="{'boton-none': currentTab != 'Tipos de medidor'}"
+                (click)="AgregarTipoMedidor()">
+                <span>Crear Tipo de Medidor</span>
+            </button>
+
+
+            <button mat-raised-button [ngClass]="{'boton-none': currentTab != 'ASADA'}"
+                [disabled]="asadaForm.invalid || asadaForm.pristine" (click)="guardarAsada()">
+                <span>Guardar Configuración</span>
+            </button>
+
+            <button mat-raised-button [ngClass]="{'boton-none': currentTab != 'Notificaciones'}"
+                [disabled]="notificacionForm.invalid || notificacionForm.pristine" (click)="guardarNotificaciones()">
+                <span>Guardar Notificaciones</span>
+            </button>  
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+
+                <mat-tab-group (selectedTabChange)="tabActiva($event)" *ngIf="preciosForm">
+
+                    <mat-tab label="Valor del metro">
+                        <form name="preciosForm" [formGroup]="preciosForm" class="product w-100-p" fxLayout="column"
+                            fxFlex>
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+
+                                <input type="hidden" formControlName="id" name="id">
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label class="label-blue">De 1 a 10 metros:</mat-label>
+                                    <input matInput placeholder="Costo" name="unoAdiez" formControlName="unoAdiez"
+                                        type="number">
+                                    <span matPrefix class="align-center">₡&nbsp;</span>
+                                    <mat-hint align="start">Este aplica para el rango de precios de 1 a 10 metros.
+                                    </mat-hint>
+                                    <mat-error>Este campo es requerido!</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label class="label-green">De 11 a 30 metros:</mat-label>
+                                    <input matInput placeholder="Costo" name="onceAtreinta"
+                                        formControlName="onceAtreinta" type="number">
+                                    <span matPrefix class="align-center">₡&nbsp;</span>
+                                    <mat-hint align="start">Este aplica para el rango de precios de 11 a 30 metros.
+                                    </mat-hint>
+                                    <mat-error>Este campo es requerido!</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label class="label-orange">De 31 a 60 metros:</mat-label>
+                                    <input matInput placeholder="Costo" name="treintaYunoAsecenta"
+                                        formControlName="treintaYunoAsecenta" type="number">
+                                    <span matPrefix class="align-center">₡&nbsp;</span>
+                                    <mat-hint align="start">Este aplica para el rango de precios de 31 a 60 metros.
+                                    </mat-hint>
+                                    <mat-error>Este campo es requerido!</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label class="label-orange-2">Mas de 60 metros:</mat-label>
+                                    <input matInput placeholder="Costo" name="masDeSecenta"
+                                        formControlName="masDeSecenta" type="number">
+                                    <span matPrefix class="align-center">₡&nbsp;</span>
+                                    <mat-hint align="start">Este aplica para el rango de precios de mas de 60 metros.
+                                    </mat-hint>
+                                    <mat-error>Este campo es requerido!</mat-error>
+                                </mat-form-field>
+
+                            </div>
+                        </form>
+                    </mat-tab>
+
+                    <mat-tab label="Impuestos">
+
+                        <div class="tab-content" fusePerfectScrollbar>
+
+
+                            <form name="impuestosForm" [formGroup]="impuestosForm" class="product w-100-p"
+                                fxLayout="column" fxFlex>
+                                <div class="tab-content p-24" fusePerfectScrollbar>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label class="label-blue">Impuesto de Reconexión:</mat-label>
+                                        <input matInput placeholder="Costo" name="impuestoReactivacion"
+                                            formControlName="impuestoReactivacion" type="number">
+                                        <span matPrefix class="align-center">₡&nbsp;</span>
+                                        <mat-hint align="start">Este impuesto se cobra en el proximo periodo despúes de
+                                            reconectado el medidor.</mat-hint>
+                                        <mat-error>Este campo es requerido!</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label class="label-green">Impuesto de Retraso:</mat-label>
+                                        <input matInput placeholder="Costo" name="impuestoRetraso"
+                                            formControlName="impuestoRetraso" type="number">
+                                        <span matPrefix class="align-center">₡&nbsp;</span>
+                                        <mat-hint align="start">Este impuesto se aplica despúes de la fecha de
+                                            vencimiento de los recibos.</mat-hint>
+                                        <mat-error>Este campo es requerido!</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label class="label-orange">Impuesto de Hidrante:</mat-label>
+                                        <input matInput placeholder="Costo" name="impuestoHidrante"
+                                            formControlName="impuestoHidrante" type="number">
+                                        <span matPrefix class="align-center">₡&nbsp;</span>
+                                        <mat-hint align="start">Este valor se multiplica por el valor del Metro³
+                                            respectivo del medidor.</mat-hint>
+                                        <mat-error>Este campo es requerido!</mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </mat-tab>
+
+                    <mat-tab label="Tipos de medidor">
+
+                        <div class="tab-content" fusePerfectScrollbar>
+
+                            <div class="background-loader" *ngIf="estaCargando || huboErrorAlcargar">
+                                <mat-spinner *ngIf="estaCargando" color="accent"></mat-spinner>
+                                <div class="limit-time-error" *ngIf="huboErrorAlcargar">
+                                    Hubo un Error al cargar la información.
+                                </div>
+                            </div>
+
+                            <mat-table [dataSource]="dataSource" matSort fusePerfectScrollbar
+                                [@animateStagger]="{value:'50'}">
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Medidor
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+                                </ng-container>
+
+                                <!-- Progress Column -->
+                                <ng-container matColumnDef="precio">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> ₡{{row.precio}} </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;" class="contact"
+                                    (click)="editarTipo(row)" matRipple [@animate]="{value:'*',params:{y:'100%'}}">
+                                </mat-row>
+                            </mat-table>
+
+
+
+                        </div>
+
+                    </mat-tab>
+
+                    <mat-tab label="ASADA">
+
+                        <div class="tab-content" fusePerfectScrollbar>
+
+
+                            <form name="asadaForm" [formGroup]="asadaForm" class="product w-100-p" fxLayout="column"
+                                fxFlex>
+                                <div class="tab-content p-24" fusePerfectScrollbar>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label class="label-blue">Nombre de la ASADA:</mat-label>
+                                        <input matInput placeholder="ASADA" name="nombre" formControlName="nombre"
+                                            type="text">
+                                        <mat-error>Este campo es requerido!</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label class="label-green">Cédula Jurídica:</mat-label>
+                                        <input matInput placeholder="Cédula Jurídica" name="cedulaJuridica"
+                                            formControlName="cedulaJuridica" type="text">
+                                        <mat-error>Este campo es requerido!</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label class="label-orange">Teléfono:</mat-label>
+                                        <input matInput placeholder="Teléfono" name="telefono"
+                                            formControlName="telefono" type="text">
+                                        <mat-error>Este campo es requerido!</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label>Dirección</mat-label>
+                                        <textarea name="direccion" formControlName="direccion" matInput
+                                            type="text"></textarea>
+                                    </mat-form-field>
+
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </mat-tab>
+
+                    <mat-tab label="Notificaciones">
+
+                        <div class="tab-content" fusePerfectScrollbar>
+
+
+                            <form name="notificacionForm" [formGroup]="notificacionForm" class="product w-100-p"
+                                fxLayout="column" fxFlex>
+                                <div class="tab-content p-24" fusePerfectScrollbar>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label>Notificación por defecto:</mat-label>
+                                        <textarea name="notificacionDefault" formControlName="notificacionDefault"
+                                            matInput type="text"></textarea>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label>Notificación temporal:</mat-label>
+                                        <textarea name="notificacion" formControlName="notificacion" matInput
+                                            type="text"></textarea>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <input matInput [min]="minDate" [matDatepicker]="picker1" formControlName="fechaInicio"
+                                            name="fechaInicio" placeholder="Choose a date">
+                                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                        <mat-datepicker touchUi #picker1></mat-datepicker>
+                                        <mat-hint align="start">Fecha de inicio para la notificación temporal.</mat-hint>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <input matInput [min]="minDate" [matDatepicker]="picker2" formControlName="fechaFin"
+                                            name="fechaFin" placeholder="Choose a date">
+                                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                        <mat-datepicker touchUi #picker2></mat-datepicker>
+                                        <mat-hint align="start">Fecha final para la notificación temporal</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </mat-tab>
+
+                </mat-tab-group>
+
+
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

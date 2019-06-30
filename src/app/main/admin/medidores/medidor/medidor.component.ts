@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations/index';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,6 +6,8 @@ import { MatTabChangeEvent, MatTableDataSource } from '@angular/material';
 import { TipoDeMedidorService } from '../../../../services/tipo-de-medidor.service';
 import { DeudaService } from 'app/services/deuda.service';
 import { MedidorService } from '../../../../services/medidor.service';
+import swal from 'sweetalert';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-medidor',
@@ -14,7 +16,7 @@ import { MedidorService } from '../../../../services/medidor.service';
   animations   : fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class MedidorComponent implements OnInit {
+export class MedidorComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['costoTotal', 'deuda', 'plazo', 'tipoDeuda', 'estado', 'detalleDeuda', 'created_at'];
   dataSource: MatTableDataSource<any>;
@@ -31,6 +33,7 @@ export class MedidorComponent implements OnInit {
   columna:string = 'created_at';
   orden:string = 'desc';
   total:number = 0;
+  subcripciones:Subscription [] =[];
 
   constructor(private _formBuilder: FormBuilder, 
               private router:Router, 
@@ -39,11 +42,11 @@ export class MedidorComponent implements OnInit {
               private _medidorService:MedidorService) { 
     if (localStorage.getItem('medidor')) {
       this.medidor = JSON.parse(localStorage.getItem('medidor'))
-      localStorage.removeItem('medidor');
       this.medidorForm = this.createMedidorForm();
-      this._tipoMedidorService.obtenerTiposDeMedidor().subscribe((res:any)=>{
-        this.tiposDeMedidores = res.tiposDeMedidores;
-      })
+      this.subcripciones.push( this._tipoMedidorService.obtenerTiposDeMedidor().subscribe((res:any)=>{
+          this.tiposDeMedidores = res.tiposDeMedidores;
+        })
+      )
     }else{
       this.router.navigate(['/admin/medidores']);
     }
@@ -51,6 +54,11 @@ export class MedidorComponent implements OnInit {
 
   ngOnInit() {
     this.cargarDeudas();
+  }
+
+  ngOnDestroy(): void {
+    localStorage.removeItem('medidor');
+    this.subcripciones.forEach(sub => sub.unsubscribe())
   }
 
   tabActiva(evento:MatTabChangeEvent){
@@ -63,7 +71,7 @@ export class MedidorComponent implements OnInit {
 
   cargarDeudas(){
     this.estaCargando = true;
-    this._deudaService.obtenerDeudas(this.medidor.medidor, this.desde, this.cantidad, this.columna, this.orden).subscribe(
+    this.subcripciones.push( this._deudaService.obtenerDeudas(this.medidor.medidor, this.desde, this.cantidad, this.columna, this.orden).subscribe(
       (res:any)=>{
         this.total = res.total;
         this.deudas = res.deudas;
@@ -72,17 +80,17 @@ export class MedidorComponent implements OnInit {
       }, err=>{
         this.huboErrorAlcargar = true;
         this.estaCargando = false;
-      }
+      })
     )
   }
 
 
   guardarDetalle(){
     console.log(this.medidorForm.value);
-    this._medidorService.actualizarMedidor(this.medidor.medidor, this.medidorForm.value.idTipoDeMedidor, this.medidorForm.value.detalle).subscribe(res=>{
-      console.log('Se actulizo');
-      
-    })
+    this.subcripciones.push( this._medidorService.actualizarMedidor(this.medidor.medidor, this.medidorForm.value.idTipoDeMedidor, this.medidorForm.value.detalle).subscribe(res=>{
+        console.log('Se actulizo');
+      })
+    )
     
   }
 
@@ -105,9 +113,10 @@ export class MedidorComponent implements OnInit {
         if (!valido) {
           swal('Error', 'El nuevo valor de la deuda debe de ser un multiplo de la división del total de la deuda por el plazo o bien cero para cancelar la deuda.','error');          
         }else{
-          this._deudaService.actualizarDeuda(deuda.id, value).subscribe(res=>{
-            this.cargarDeudas();
-          })
+          this.subcripciones.push( this._deudaService.actualizarDeuda(deuda.id, value).subscribe(res=>{
+              this.cargarDeudas();
+            })
+          )
         }
       }
     });

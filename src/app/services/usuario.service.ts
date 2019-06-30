@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { URL_SERVICIOS } from '../config/config';
 import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { map, catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { throwError, Observable } from 'rxjs';
 import { Usuario } from '../models/Usuario.model';
 import * as jwt_decode from "jwt-decode";
 import { Router } from '@angular/router';
+import swal from 'sweetalert';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,122 @@ export class UsuarioService {
   usuario:Usuario;
   token:string;
  
-  constructor(private http:HttpClient, private router:Router) { 
+  constructor(private http?:HttpClient, private router?:Router) { 
     this.cargarStorage();
   }
+
+
+  obtenerUsuarios(desde:number, cantidad:number, columna:string, orden:string){
+    let url = URL_SERVICIOS + `/api/usuarios?desde=${desde}&cantidad=${cantidad}&columna=${columna}&orden=${orden}&token=${this.token}`;
+    return this.http.get(url); 
+  }
+
+  obtenerUsuario(){
+    let url = URL_SERVICIOS + `/api/usuario/${this.usuario.id}?token=${this.token}`;
+    return this.http.get(url); 
+  }
+
+  buscarUsuarios(desde:number, cantidad:number, columna:string, orden:string, termino: Observable<string>){
+    return termino.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap(term =>{
+        let url = URL_SERVICIOS + `/api/usuarios/buscar/${term}?desde=${desde}&cantidad=${cantidad}&columna=${columna}&orden=${orden}&token=${this.token}`;
+        return this.http.get(url)
+      })
+    )
+  }
+
+  crearUsuario(usuario:Usuario){
+    let url = URL_SERVICIOS + `/api/usuario?token=${this.token}`;
+    return this.http.post(url, usuario).pipe(
+      map((resp:any)=>{
+        swal('Acción realizada!', 'Usuario creado correctamente', 'success');
+        return true;
+      }),
+      catchError(err=>{
+        let mensaje = '';
+        for (const prop in err.error.errors) {
+          mensaje +=`* ${err.error.errors[prop]}\n`;
+        }
+        swal('Ah ocurrido un error!', mensaje, 'error');
+        return throwError(err.error.errors);
+      })
+    )
+  } 
+
+  actualizarUsuario(usuario:any, id:any){
+    let url = URL_SERVICIOS + `/api/usuario/${id}?token=${this.token}`;
+    return this.http.put(url, usuario).pipe(
+      map((resp:any)=>{
+        swal('Acción realizada!', 'Usuario actualizado correctamente', 'success');
+        return true;
+      }),
+      catchError(err=>{
+        let mensaje = '';
+        for (const prop in err.error.errors) {
+          mensaje +=`* ${err.error.errors[prop]}\n`;
+        }
+        swal('Ah ocurrido un error!', mensaje, 'error');
+        return throwError(err.error.errors);
+      })
+    )
+  }
+
+  actualizarPassword(password:any, id:any){
+    let url = URL_SERVICIOS + `/api/actualizarPassword/${id}?token=${this.token}`;
+    return this.http.put(url, password).pipe(
+      map((resp:any)=>{
+        swal('Acción realizada!', 'Contraseña actualizada correctamente', 'success');
+        return true;
+      }),
+      catchError(err=>{
+        return throwError(err);
+      })
+    )
+  }
+
+  actualizarPerfil(usuario:Usuario, id:any){
+    let url = URL_SERVICIOS + `/api/actualizarPerfil/${id}?token=${this.token}`;
+    return this.http.put(url, usuario).pipe(
+      map((resp:any)=>{
+        swal('Acción realizada!', 'Usuario actualizado correctamente', 'success');
+        return true;
+      }),
+      catchError(err=>{
+        return throwError(err);
+      })
+    )
+  }
+
+  eliminarUsuario(id:number){
+    let url = URL_SERVICIOS + `/api/usuario/${id}?token=${this.token}`;
+    return this.http.delete(url).pipe(
+      map(res=>{
+        swal('Acción realizada!', 'Usuario eliminado correctamente', 'success');
+        return true;
+      }),
+      catchError(err=>{
+        swal('Ah ocurrido un error!', 'no se puedo eliminar el usuario', 'error');
+        return throwError(err);
+      })
+    )
+  }
+
+
+  // ============ SESION DE USUARIO ==============
+
+  compararPasswords(password:string){
+    let url = URL_SERVICIOS + `/api/compararpassword/${this.usuario.id}?token=${this.token}`;
+    return this.http.post(url, {password}).pipe(
+      map((resp:any)=>{
+        return true;
+      }),
+      catchError(err=>{
+        return throwError(err);
+      })
+    )
+  } 
 
   login(usuario:Usuario, recuerdame:boolean= false){
     let url = URL_SERVICIOS + '/api/login';
@@ -39,8 +153,6 @@ export class UsuarioService {
             return true;
           }),
           catchError(err =>{
-            // console.log(err.error.mensaje);
-            // swal('Error en el login', err.error.mensaje, 'error')
             console.log('error:', err);
             return throwError(err)
           })

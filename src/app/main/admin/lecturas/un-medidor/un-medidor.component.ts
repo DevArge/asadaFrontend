@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations/index';
 import { MatTableDataSource } from '@angular/material';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { LecturaService } from '../../../../services/lectura.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   animations   : fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class UnMedidorComponent implements OnInit {
+export class UnMedidorComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['nombre', 'apellido1', 'apellido2','detalle', 'lectura', 'metros', 'periodo'];
   dataSource: MatTableDataSource<any>;
@@ -31,6 +31,7 @@ export class UnMedidorComponent implements OnInit {
   nombre:string;
   apellido1:string;
   apellido2:string;
+  subcripciones:Subscription [] = [];
 
   constructor(private _lecturaService:LecturaService, private route:ActivatedRoute, private router:Router) { 
     this.route.params.subscribe(params => this.idMedidor = params.id)
@@ -45,9 +46,13 @@ export class UnMedidorComponent implements OnInit {
     this.cargarLecturas();
   }
 
+  ngOnDestroy(){
+    this.subcripciones.forEach(sub => sub.unsubscribe())
+  }
+
   cargarLecturas(){
     this.estaCargando = true;
-    this._lecturaService.obtenerLecturasDeUnMedidor(this.desde, this.cantidad, this.columna, this.orden, this.idMedidor)
+    this.subcripciones.push( this._lecturaService.obtenerLecturasDeUnMedidor(this.desde, this.cantidad, this.columna, this.orden, this.idMedidor)
       .subscribe((resp:any) =>{
         this.sinRegistrar = resp.sinRegistrar;
         this.total = resp.total;
@@ -57,7 +62,8 @@ export class UnMedidorComponent implements OnInit {
       }, err=>{
         this.huboErrorAlcargar = true;
         this.estaCargando = false;
-      });
+      })
+    )
   }
 
 
@@ -66,13 +72,14 @@ export class UnMedidorComponent implements OnInit {
   buscarLectura(){
     this.desde = 0;
     this.estaCargando = true;
-    this._lecturaService.buscarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.termino,'idMedidor', 'ver', null, this.idMedidor)
+    this.subcripciones.push( this._lecturaService.buscarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.termino,'idMedidor', 'ver', null, this.idMedidor)
       .subscribe((resp:any) =>{
         this.total = resp.total;
         this.lecturas = resp.lecturas;
         this.dataSource = new MatTableDataSource(this.lecturas);
         this.estaCargando = false;
-      });   
+      })
+    )  
   }
 
   ordenarColumna(evento:any){

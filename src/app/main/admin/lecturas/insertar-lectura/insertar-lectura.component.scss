@@ -110,8 +110,8 @@ mat-footer-row, mat-row {
   }
 
   .lectura{
-    border-bottom: 1px solid black;
-    text-align: center;
+    border-bottom: 1px solid black !important;
+    text-align: center !important;
   }
 
   .lectura:focus{

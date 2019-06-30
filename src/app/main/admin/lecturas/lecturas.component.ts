@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations/index';
 import { LecturaService } from '../../../services/lectura.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   animations   : fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class LecturasComponent implements OnInit {
+export class LecturasComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['nombre', 'apellido1', 'apellido2','detalle', 'medidor', 'lecturaAnt', 'lectura', 'metros', 'promedio'];
   dataSource: MatTableDataSource<any>;
@@ -28,6 +28,7 @@ export class LecturasComponent implements OnInit {
   termino = new Subject<string>();
   periodo:string;
   lectura:number;
+  subcripciones:Subscription [] = [];
 
   constructor(private _lecturaService:LecturaService, private route:ActivatedRoute, private router:Router) { 
     this.route.params.subscribe(params => this.periodo = params.periodo)
@@ -41,9 +42,13 @@ export class LecturasComponent implements OnInit {
     this.cargarLecturas();
   }
 
+  ngOnDestroy(){
+    this.subcripciones.forEach(sub => sub.unsubscribe())
+  }
+
   cargarLecturas(){
     this.estaCargando = true;
-    this._lecturaService.obtenerLecturas(this.desde, this.cantidad, this.columna, this.orden, this.periodo)
+    this.subcripciones.push(this._lecturaService.obtenerLecturas(this.desde, this.cantidad, this.columna, this.orden, this.periodo)
       .subscribe((resp:any) =>{
         this.sinRegistrar = resp.sinRegistrar;
         this.total = resp.total;
@@ -53,7 +58,8 @@ export class LecturasComponent implements OnInit {
       }, err=>{
         this.huboErrorAlcargar = true;
         this.estaCargando = false;
-      });
+      })
+    )
   }
 
 
@@ -62,13 +68,14 @@ export class LecturasComponent implements OnInit {
   buscarLectura(){
     this.desde = 0;
     this.estaCargando = true;
-    this._lecturaService.buscarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.termino,'periodo', 'lecturas', this.periodo)
+    this.subcripciones.push( this._lecturaService.buscarLecturas(this.desde, this.cantidad, this.columna, this.orden, this.termino,'periodo', 'lecturas', this.periodo)
       .subscribe((resp:any) =>{
         this.total = resp.total;
         this.lecturas = resp.lecturas;
         this.dataSource = new MatTableDataSource(this.lecturas);
         this.estaCargando = false;
-      });   
+      })
+    )  
   }
 
   ordenarColumna(evento:any){

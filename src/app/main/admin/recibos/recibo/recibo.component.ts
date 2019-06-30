@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations/index';
 import { Router } from '@angular/router';
 import { Recibo } from '../../../../models/Recibo.model';
 import { ReciboService } from '../../../../services/recibo.service';
 import { AsadaService } from '../../../../services/asada.service';
 import { ConfiguracionService } from '../../../../services/configuracion.service';
+import swal from 'sweetalert';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-recibo',
@@ -13,10 +15,12 @@ import { ConfiguracionService } from '../../../../services/configuracion.service
   animations: fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
-export class ReciboComponent implements OnInit {
+export class ReciboComponent implements OnInit, OnDestroy {
 
   recibo: Recibo;
   ruta: string;
+  estado:string = 'PENDIENTE';
+  subscripcion:Subscription;
 
   constructor(private router: Router,
               private _reciboService: ReciboService,
@@ -24,7 +28,11 @@ export class ReciboComponent implements OnInit {
               public _confService: ConfiguracionService) {
     if (localStorage.getItem('recibo')) {
       this.recibo = JSON.parse(localStorage.getItem('recibo'));
-      this.ruta = '/admin/recibos/' + this.recibo.periodo;
+      if (localStorage.getItem('abonado')) {
+        this.ruta = '/admin/recibos/medidor/' + this.recibo.medidor;
+      }else{
+        this.ruta = '/admin/recibos/' + this.recibo.periodo;
+      }
       localStorage.removeItem('recibo');
     } else {
       this.router.navigate(['admin/seleccionar-periodo/recibos']);
@@ -32,6 +40,10 @@ export class ReciboComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(){
+    this.subscripcion.unsubscribe();
   }
 
   pagarRecibo() {
@@ -44,8 +56,8 @@ export class ReciboComponent implements OnInit {
     })
       .then((willDelete) => {
         if (willDelete) {
-          this._reciboService.pagarRecibo(this.recibo.id).subscribe(() => {
-            this.router.navigate(['admin/recibos/' + this.recibo.periodo]);
+          this.subscripcion = this._reciboService.pagarRecibo(this.recibo.id).subscribe(() => {
+            this.router.navigate([this.ruta]);
           }, err => {
             console.log(err);
           })

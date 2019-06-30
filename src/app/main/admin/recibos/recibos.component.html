@@ -35,7 +35,7 @@
           <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
             <mat-menu #appMenu="matMenu">
               <button mat-menu-item>Exportar a excel</button>
-              <button mat-menu-item (click)="cambiarFechaVencimiento()">Cambiar fecha de vencimiento</button>
+              <button mat-menu-item *ngIf="fechaVencimiento != null" (click)="cambiarFechaVencimiento()">Cambiar fecha de vencimiento</button>
             </mat-menu>
   
             <button mat-icon-button [matMenuTriggerFor]="appMenu">

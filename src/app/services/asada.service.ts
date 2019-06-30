@@ -16,7 +16,7 @@ export class AsadaService {
   telefono:string;
   direccion:string
 
-  constructor(private htpp:HttpClient, private _usuarioService:UsuarioService) { 
+  constructor(private http:HttpClient, private _usuarioService:UsuarioService) { 
     this.obtenerAsada().subscribe((res:any)=>{
       this.nombre = res.asada.nombre;
       this.cedulaJuridica = res.asada.cedulaJuridica;
@@ -27,12 +27,12 @@ export class AsadaService {
 
   obtenerAsada(){
     let url = URL_SERVICIOS + '/api/asada?token=' + this._usuarioService.token;
-    return this.htpp.get(url);
+    return this.http.get(url);
   }
 
   actualizarAsada(nombre:string, cedulaJuridica:string,  telefono:string, direccion:string, id:string){
     let url = URL_SERVICIOS + `/api/asada/${id}?token=` + this._usuarioService.token;
-    return this.htpp.put(url, {nombre, cedulaJuridica, telefono, direccion}).pipe(
+    return this.http.put(url, {nombre, cedulaJuridica, telefono, direccion}).pipe(
       map(res=>{
         swal('Acción realizada!', 'ASADA actualizada correctamente', 'success');
         return true;

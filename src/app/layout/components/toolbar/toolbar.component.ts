@@ -9,6 +9,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
 import { UsuarioService } from '../../../services/usuario.service';
+import { Usuario } from '../../../models/Usuario.model';
 
 @Component({
     selector     : 'toolbar',
@@ -26,6 +27,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
+    usuario:Usuario;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -41,9 +43,10 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
         private _translateService: TranslateService,
-        private _usuarioService:UsuarioService
+        private _usuarioService:UsuarioService,
     )
     {
+        this.usuario = _usuarioService.usuario;
         // Set the defaults
         this.userStatusOptions = [
             {

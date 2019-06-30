@@ -41,7 +41,10 @@ export class LoginComponent implements OnInit {
 
   login(){
     this._usuario.login(this.loginForm.value, this.loginForm.value.recuerdame).subscribe(resp=>{
-      this.route.navigate(['/admin/dashboard']);
+      window.location.reload();
+      setTimeout(function(){
+        this.route.navigate(['/admin/dashboard']);
+      },3000)
     });
   }
 

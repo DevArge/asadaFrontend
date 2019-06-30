@@ -1,0 +1,127 @@
+<div id="abonados" class="page-layout carded fullwidth inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- HEADER -->
+    <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+      fxLayoutAlign.gt-sm="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+          group
+        </mat-icon>
+        <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          Facturas de cuentas
+        </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <!-- SEARCH -->
+      <div class="search-wrapper mx-32 mx-md-0">
+        <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon>search</mat-icon>
+          <input #buscar placeholder="Buscar Factura" (keyup)="termino.next(buscar.value)">
+        </div>
+      </div>
+      <!-- / SEARCH -->
+
+      <!-- ADD BUTTON -->
+      <button mat-raised-button (click)="AgregarFactura()" class="add-product-button fuse-white mt-24 mt-md-0">
+        <mat-icon>person_add</mat-icon>
+        <span> Factura</span>
+      </button>
+      <!-- / ADD BUTTON -->
+
+    </div>
+    <!-- / HEADER -->
+
+
+
+    <!-- CONTENT CARD -->
+    <div class="content-card loader-container">
+
+      <div class="background-loader" *ngIf="estaCargando || huboErrorAlcargar">
+        <mat-spinner *ngIf="estaCargando" color="accent"></mat-spinner>
+        <div class="limit-time-error" *ngIf="huboErrorAlcargar">
+          Hubo un Error al cargar la información.
+        </div>
+      </div>
+
+      <mat-table [dataSource]="dataSource" matSort fusePerfectScrollbar [@animateStagger]="{value:'50'}"
+        (matSortChange)="ordenarColumna($event)">
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="cuenta">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Cuenta </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
+        </ng-container>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> # Factura </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.numero}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="fecha">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.fecha}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="grand_total">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Total </mat-header-cell>
+          <mat-cell *matCellDef="let row"> ₡{{row.grand_total}} </mat-cell>
+        </ng-container>
+
+           <ng-container matColumnDef="editar">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <div fxFlex="row" fxLayoutAlign="end">
+                    <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                            (click)="$event.stopPropagation();">
+                        <mat-icon class="secondary-text">more_vert</mat-icon>
+                    </button>
+                    <mat-menu #moreMenu="matMenu">
+                        <button mat-menu-item aria-label="remove" (click)="eliminarFactura(row.id)">
+                            <mat-icon>delete</mat-icon>
+                            <span>Eliminar Factura</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="contact" [routerLink]="['/admin/factura', row.id]" matRipple
+          [@animate]="{value:'*',params:{y:'100%'}}"></mat-row>
+      </mat-table>
+
+      <div class="example-button-row">
+        <button mat-button color="primary" [disabled]="desde == 0 || estaCargando" (click)="paginaAnterior()">
+          <mat-icon>arrow_back_ios</mat-icon>Anterior
+        </button>
+        <button mat-button color="primary" [disabled]="(desde + facturas.length) == total || estaCargando"
+          (click)="paginaSiguiente()">Siguiente<mat-icon>arrow_forward_ios</mat-icon></button>
+        Registros por página:
+        <mat-form-field>
+          <mat-select #select [ngModel]="cantidad" (selectionChange)="tamanioPagina(select)">
+            <mat-option [value]="10">10</mat-option>
+            <mat-option [value]="50">50</mat-option>
+            <mat-option [value]="100">100</mat-option>
+          </mat-select>
+        </mat-form-field>
+        mostrando {{desde +1}} - {{desde + facturas.length}} de {{total}}
+      </div>
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

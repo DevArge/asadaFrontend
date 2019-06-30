@@ -1,5 +1,203 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
+<div id="dashboard-analytics" class="page-layout blank">
 
-  <div class="main-widget"><div class="position-relative p-24 blue-600" fxlayout="row" fxlayoutalign="space-between center" style="flex-direction: row; box-sizing: border-box; display: flex; max-height: 100%; place-content: center space-between; align-items: center;"><div class="ng-tns-c69-164" fxlayout="column" fxlayoutalign="start start" style="flex-direction: column; box-sizing: border-box; display: flex; max-width: 100%; place-content: flex-start; align-items: flex-start;"><span class="h2">Visitors</span><span class="h5 secondary-text">Unique visitors by month</span></div><div class="ng-tns-c69-164" fxlayout="row" fxlayoutalign="start center" style="flex-direction: row; box-sizing: border-box; display: flex; max-height: 100%; place-content: center flex-start; align-items: center;"><div class="py-8 px-12 border-radius-2 line-height-1 mr-8 cursor-pointer blue-700"> 2016 </div><div class="py-8 px-12 border-radius-2 line-height-1 mr-8 cursor-pointer"> 2017 </div><div class="py-8 px-12 border-radius-2 line-height-1 cursor-pointer"> 2018 </div></div></div><div class="position-relative h-256 pb-16 blue-600"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div><canvas class="ng-tns-c69-164 chartjs-render-monitor" basechart="" width="1180" height="300" style="display: block; height: 240px; width: 944px;"></canvas></div></div>
+    <div class="main-widget">
+        <div style="display: block;">
+            <canvas *ngIf="barChartData.length" baseChart height="90px" [datasets]="barChartData"
+                [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [colors]="chartColors"
+                [chartType]="barChartType"></canvas>
+            <div id="loader-load" class="background-loader" *ngIf="estaCargando || huboErrorAlcargar">
+                <mat-spinner *ngIf="estaCargando" color="accent"></mat-spinner>
+                <div class="limit-time-error" *ngIf="huboErrorAlcargar">
+                    Hubo un Error al cargar la información.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-widget">
+
+
+        <!-- WIDGET 1 -->
+        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+            fxFlex.gt-xs="50" fxFlex.gt-md="25">
+
+            <!-- Front -->
+            <div class="fuse-widget-front">
+                <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div class="h3">Ganancias</div>
+                    <button mat-icon-button fuseWidgetToggle aria-label="more">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
+
+                <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                    <div class="light-blue-fg font-size-72 line-height-72">
+                        ₡{{ganancias}} 
+                    </div>
+                    <div class="h3 secondary-text font-weight-500">Del presente periodo
+                    </div>
+                </div>
+
+                <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                    <!-- <span class="h4 secondary-text text-truncate">
+                        Etiqueta
+                    </span> -->
+                    <span class="h4 ml-8">
+                        <a [routerLink]="['/admin/seleccionar-periodo/cuentas']">Ver más</a>
+                    </span>
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pt-32">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    Para ver más detalle sobre este valor, ir al módulo de Cuentas pos Cobrar.
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+        <!-- / WIDGET 1 -->
+
+        <!-- WIDGET 2 -->
+        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+            fxFlex.gt-xs="50" fxFlex.gt-md="25">
+
+            <!-- Front -->
+            <div class="fuse-widget-front">
+                <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div class="h3">Recibos</div>
+
+                    <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
+
+                <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                    <div class="red-fg font-size-72 line-height-72">
+                        {{recibos}}
+                    </div>
+                    <div class="h3 secondary-text font-weight-500">Sin Pagar
+                    </div>
+                </div>
+
+                <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                    <span class="h4 ml-8">
+                        <a [routerLink]="['/admin/seleccionar-periodo/recibos']">Ver más</a>
+                    </span>
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pt-32">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    Los recibos sin pagar pueden ser de periodos distintos, por lo que se debe revisar en cada periodo los recibos pendientes.
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+        <!-- / WIDGET 2 -->
+
+        <!-- WIDGET 3 -->
+        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+            fxFlex.gt-xs="50" fxFlex.gt-md="25">
+
+            <!-- Front -->
+            <div class="fuse-widget-front">
+                <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div class="h3">Abonados</div>
+
+                    <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
+
+                <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                    <div class="orange-fg font-size-72 line-height-72">
+                        {{abonados}}
+                    </div>
+                    <div class="h3 secondary-text font-weight-500">Activos
+                    </div>
+                </div>
+
+                <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                    <span class="h4 ml-8">
+                        <a [routerLink]="['/admin/abonados']">Ver más</a>
+                    </span>
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pt-32">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    Esta es la cantidad de Abonados activos.
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+        <!-- / WIDGET 3 -->
+
+        <!-- WIDGET 4 -->
+        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+            fxFlex.gt-xs="50" fxFlex.gt-md="25">
+
+            <!-- Front -->
+            <div class="fuse-widget-front">
+                <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div class="h3">Medidores</div>
+
+                    <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
+
+                <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                    <div class="blue-grey-fg font-size-72 line-height-72">
+                        {{medidores}}
+                    </div>
+                    <div class="h3 secondary-text font-weight-500">Activos
+                    </div>
+                </div>
+
+                <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                    <span class="h4 ml-8">
+                        <a [routerLink]="['/admin/medidores']">Ver más</a>
+                    </span>
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pt-32">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    Esta es la cantidad de Medidores activos.
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+        <!-- / WIDGET 4 -->
+    </div>
 
 </div>

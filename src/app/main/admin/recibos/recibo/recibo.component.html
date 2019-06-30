@@ -8,10 +8,10 @@
             </button>
             <h2>Recibo del medidor #{{recibo.medidor}} {{recibo.detalle}} </h2>
         </div>
-        <button mat-raised-button (click)="pagarRecibo()" *ngIf="recibo.estado == 'PENDIENTE'"
+        <button mat-raised-button (click)="pagarRecibo()" *ngIf="recibo.estado === estado"
             class="pagar-button">
-            <mat-icon>local_atm</mat-icon>
-            <span> PAGAR RECIBO</span>
+            <mat-icon>local_atm</mat-icon> 
+            <span> PAGAR RECIBO</span> 
         </button>
     </div>
     <!-- / HEADER -->
@@ -50,8 +50,8 @@
                                     <div class="title">
                                         {{recibo.nombre + ' ' + recibo.apellido1 + ' ' + recibo.apellido2}}</div>
                                     <div class="address">{{recibo.direccion}}</div>
-                                </div>
-                            </div>
+                                </div>   
+                            </div>   
 
                             <div class="issuer accent" fxLayout="row" fxLayoutAlign="start center">
                                 <div class="logo">

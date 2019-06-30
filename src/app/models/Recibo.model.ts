@@ -12,7 +12,7 @@ export class Recibo{
                 public detalle: String,
                 public abonoMedidor: number,
                 public cargoFijo: number,
-                public estado: string,
+                public estado: String,
                 public hidrante: number,
                 public lectura: number,
                 public metros: number,
