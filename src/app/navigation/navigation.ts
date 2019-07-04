@@ -197,7 +197,7 @@ if (usuarioService.usuario.role == 'FONTANERO_ROLE') {
             children : [
                 {
                     id       : 'historial',
-                    title    : 'Historial de usuarios',
+                    title    : 'Historial de actividades',
                     type     : 'item',
                     icon     : 'receipt',
                     url      : 'admin/historial',

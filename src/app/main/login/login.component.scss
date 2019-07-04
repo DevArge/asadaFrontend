@@ -36,6 +36,12 @@
                     margin: 16px 0 32px 0;
                 }
 
+                .error{
+                    color: red;
+                    margin-top: -20px;
+                    margin-bottom: 20px;
+                }
+
                 form {
                     width: 100%;
                     text-align: left;
@@ -71,6 +77,14 @@
                         @include media-breakpoint('xs') {
                             width: 90%;
                         }
+                    }
+                    .loader{
+                        display: block;
+                        width: 100%;
+                    }
+
+                    .loader mat-spinner{
+                        margin: auto;
                     }
                 }
 

@@ -38,12 +38,15 @@ export class AbonadoService {
         return true;
       }),
       catchError(err=>{
-        let mensaje = '';
-        for (const prop in err.error.errors) {
-          mensaje +=`* ${err.error.errors[prop]}\n`;
+        if (err.status ===  401){
+        }else{
+          let mensaje = '';
+          for (const prop in err.error.errors) {
+            mensaje +=`* ${err.error.errors[prop]}\n`;
+          }
+          swal('Ah ocurrido un error!', mensaje, 'error');
+          return throwError(err.error.errors);
         }
-        swal('Ah ocurrido un error!', mensaje, 'error');
-        return throwError(err.error.errors);
       })
     )
   } 
@@ -56,12 +59,15 @@ export class AbonadoService {
         return true;
       }),
       catchError(err=>{
-        let mensaje = '';
-        for (const prop in err.error.errors) {
-          mensaje +=`* ${err.error.errors[prop]}\n`;
+        if (err.status ===  401){
+        }else{
+          let mensaje = '';
+          for (const prop in err.error.errors) {
+            mensaje +=`* ${err.error.errors[prop]}\n`;
+          }
+          swal('Ah ocurrido un error!', mensaje, 'error');
+          return throwError(err.error.errors);
         }
-        swal('Ah ocurrido un error!', mensaje, 'error');
-        return throwError(err.error.errors);
       })
     )
   }
@@ -74,8 +80,11 @@ export class AbonadoService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'no se puedo eliminar el abonado', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'no se puedo eliminar el abonado', 'error');
+          return throwError(err);
+        }
       })
     )
   }

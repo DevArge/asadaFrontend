@@ -103,6 +103,9 @@ import { FacturaComponent } from './cuentas-por-pagar/facturas-de-cuentas/factur
     CuentaComponent,
     AnadirReparacionComponent,
     TipoMedidorComponent
+  ],
+  providers:[
+
   ]
 
 })

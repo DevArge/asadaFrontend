@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MatButtonModule, MatIconModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatToolbarModule, MatProgressSpinnerModule } from '@angular/material';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
 
@@ -20,6 +20,7 @@ import { APP_ROUTES } from './app.routes';
 import { HomeComponent } from './main/home/home.component';
 import { LoginComponent } from './main/login/login.component';
 import { ConsultaComponent } from './main/consulta/consulta.component';
+import { AuthInterceptorHttpService } from './services/AuthInterceptor-http.service';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import { ConsultaComponent } from './main/consulta/consulta.component';
         MatFormFieldModule,
         MatInputModule,
         MatToolbarModule,
-
+        MatProgressSpinnerModule,
+        
         // Fuse modules
         FuseModule.forRoot(fuseConfig),
         FuseProgressBarModule,
@@ -60,6 +62,13 @@ import { ConsultaComponent } from './main/consulta/consulta.component';
     ],
     bootstrap   : [
         AppComponent
+    ],
+    providers:[
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptorHttpService,
+            multi: true
+        }
     ]
 })
 export class AppModule

@@ -70,8 +70,10 @@ export class FacturaService {
         return true;
       }),
       catchError(err=>{
-        console.log(err);
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          return throwError(err);
+        }
       })
     )
   }

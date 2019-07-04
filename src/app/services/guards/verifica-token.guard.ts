@@ -31,13 +31,12 @@ export class VerificaTokenGuard implements CanActivate {
       //                          ( 4 horas, 60 minutos, 60 segundos, 1000 milisegundos)
       // ahora.setTime( ahora.getTime() + (1 * 60 * 60 * 1000) );// suma 4 horas
       ahora.setTime( ahora.getTime() + (1 * 60) );// suma 4 horas
-      if (tokenExp.getTime() > ahora.getTime()) {
-        console.log('esta bien de tiempo');
+      if (tokenExp.getTime() < ahora.getTime()) {
         resolve(true); // si el token no esta proximo a vencer
       }else{//si el token esta proximo a vencer
+        console.log('RENOVO');
         this._usuarioService.renuevaToken()
             .subscribe(()=>{
-              console.log('esta proximo a vencer');
               resolve(true);
             }, ()=>{
               this.router.navigate(['login']);

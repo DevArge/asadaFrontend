@@ -38,8 +38,11 @@ export class AsadaService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'no se puedo actualizar la ASADA', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'no se puedo actualizar la ASADA', 'error');
+          return throwError(err);
+        }
       })
     )
   }

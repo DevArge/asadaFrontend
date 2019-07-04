@@ -50,8 +50,11 @@ export class ReciboService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'no se puedo pagar el recibo', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'no se puedo pagar el recibo', 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -69,8 +72,10 @@ export class ReciboService {
         }
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'no se puedo eliminar el recibo', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+          swal('Ah ocurrido un error!', 'no se puedo eliminar el recibo', 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -83,14 +88,21 @@ export class ReciboService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'no se puedo actualizar la fecha', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'no se puedo actualizar la fecha', 'error');
+          return throwError(err);
+        }
       })
     )
   }
 
   generarPDF(id:string){
     window.open(URL_SERVICIOS + '/recibo/pdf/'+ id + '?token=' + this._usuarioService.token);
+  }
+
+  exportarExcel(periodo:string){
+    window.open(URL_SERVICIOS + '/reporte/excel/'+ periodo + '?token=' + this._usuarioService.token);
   }
 
 }

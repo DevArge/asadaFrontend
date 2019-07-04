@@ -45,8 +45,11 @@ export class ConfiguracionService {
           return true;
         }),
         catchError(err=>{
-          swal('Ah ocurrido un error!', 'No se ha podido actualizar los precios', 'error');
-          return throwError(err);
+          if (err.status ===  401){
+          }else{
+            swal('Ah ocurrido un error!', 'No se ha podido actualizar los precios', 'error');
+            return throwError(err);
+          }
         })
       )
   }
@@ -71,8 +74,11 @@ export class ConfiguracionService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'No se puedo actualizar la configuración', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'No se puedo actualizar la configuración', 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -85,8 +91,11 @@ export class ConfiguracionService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'no se puedo actualizar la configuración', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'no se puedo actualizar la configuración', 'error');
+          return throwError(err);
+        }
       })
     )
   }

@@ -23,8 +23,11 @@ export class MedidorService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', '', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', '', 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -55,8 +58,11 @@ export class MedidorService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', '', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', '', 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -69,8 +75,11 @@ export class MedidorService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', '', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', '', 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -83,8 +92,11 @@ export class MedidorService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', '', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', '', 'error');
+          return throwError(err);
+        }
       })
     )
   }

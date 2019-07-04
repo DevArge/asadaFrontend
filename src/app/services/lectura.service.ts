@@ -57,7 +57,10 @@ export class LecturaService {
       }),
       catchError(err=>{
         if (!err.error.ok) {
-          this.mostrarSWA('Error', err.error.message, 4000, 'error');
+          if (err.status ===  401) {
+          }else{
+            this.mostrarSWA('Error', err.error.message, 4000, 'error');
+          }
         }else{
           swal('Ah ocurrido un error interno!', '', 'error');
         }

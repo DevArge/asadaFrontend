@@ -36,8 +36,11 @@ export class CuentasService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', err, 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', err, 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -50,8 +53,11 @@ export class CuentasService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', err, 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', err, 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -64,8 +70,11 @@ export class CuentasService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'no se puedo eliminar la cuenta', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'no se puedo eliminar la cuenta', 'error');
+          return throwError(err);
+        }
       })
     )
   }
@@ -79,6 +88,10 @@ export class CuentasService {
         return this.http.get(url)
       })
     )
+  }
+
+  exportarExcel(periodo:string){
+    window.open(URL_SERVICIOS + '/reporte/excel/'+ periodo + '?token=' + this._usuarioService.token);
   }
 
 

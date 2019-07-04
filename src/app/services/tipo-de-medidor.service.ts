@@ -27,8 +27,11 @@ export class TipoDeMedidorService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'No se pudo crear el tipo de medidor', 'error');
-        return throwError(err.error.errors);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'No se pudo crear el tipo de medidor', 'error');
+          return throwError(err.error.errors);
+        }
       })
     )
   } 
@@ -41,8 +44,11 @@ export class TipoDeMedidorService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'No se pudo actualizar el tipo de medidor', 'error');
-        return throwError(err.error.errors);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'No se pudo actualizar el tipo de medidor', 'error');
+          return throwError(err.error.errors);
+        }
       })
     )
   }
@@ -55,11 +61,12 @@ export class TipoDeMedidorService {
         return true;
       }),
       catchError(err=>{
-        swal('Ah ocurrido un error!', 'no se puedo eliminar el Tipo de Medidor', 'error');
-        return throwError(err);
+        if (err.status ===  401){
+        }else{
+          swal('Ah ocurrido un error!', 'no se puedo eliminar el Tipo de Medidor', 'error');
+          return throwError(err);
+        }
       })
     )
   }
-
-
 }

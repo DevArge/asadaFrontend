@@ -77,6 +77,10 @@ export class CuentasPorCobrarComponent implements OnInit, OnDestroy {
     return (Number(reactivacion) + Number(reparacion) + Number(retraso) + Number(abono));
   }
 
+  exportarExcel(){
+    this._cuentasService.exportarExcel(this.periodo);
+  }
+
   
   ///==================== TABLA =================//
 

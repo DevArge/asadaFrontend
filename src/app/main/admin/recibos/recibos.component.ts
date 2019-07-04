@@ -75,6 +75,10 @@ export class RecibosComponent implements OnInit, OnDestroy {
     this._reciboService.generarPDF(recibo.id);
   }
 
+  exportarExcel(){
+    this._reciboService.exportarExcel(this.periodo);
+  }
+
   eliminarRecibo(recibo:any){
     swal({
       title: "Estas seguro?",

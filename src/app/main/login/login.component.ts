@@ -15,6 +15,8 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  estaCargando:boolean = false;
+  hayError:boolean = false;
 
   constructor(private _fuseConfigService: FuseConfigService, 
               private _formBuilder: FormBuilder,
@@ -40,12 +42,20 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    this._usuario.login(this.loginForm.value, this.loginForm.value.recuerdame).subscribe(resp=>{
+    this.estaCargando = true;
+    this._usuario.login(this.loginForm.value, this.loginForm.value.recuerdame).subscribe(
+      resp=>{
       window.location.reload();
       setTimeout(function(){
         this.route.navigate(['/admin/dashboard']);
+        this.estaCargando = false;
       },3000)
-    });
+      }, err =>{
+        this.hayError = true;
+        this.estaCargando = false;
+        console.log('ERROR: ', err);
+      }
+    );
   }
 
 }

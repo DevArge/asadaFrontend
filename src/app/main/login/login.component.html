@@ -9,6 +9,7 @@
           </div>
 
           <div class="title">INICIAR SESIÓN</div>
+          <div class="error" *ngIf="hayError">Usuario o Contraseña incorrectos.</div>
 
           <form name="loginForm" [formGroup]="loginForm" novalidate>
 
@@ -50,7 +51,11 @@
                       [disabled]="loginForm.invalid"
                       (click)="login()">
                   INGRESAR
-              </button>
+                </button>
+                <div class="loader" *ngIf="estaCargando">
+                    <mat-spinner color="accent" [diameter]="20"></mat-spinner>   
+                </div>
+               
 
           </form>
 
