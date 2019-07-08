@@ -1,0 +1,59 @@
+@import "src/@fuse/scss/fuse";
+
+.periodo{
+    margin: auto;
+    width: 450px;
+    max-width: 450px;
+    height: 500px;
+}
+
+
+#price-tables {
+
+    .header {
+        padding: 24px;
+        height: 600px;
+        min-height: 600px;
+        background: #1A237E;
+        background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+
+        @include media-breakpoint('xs') {
+            height: 400px;
+            min-height: 400px;
+        }
+    }
+
+    .price-tables {
+        flex: 1 0 auto;
+
+        @include media-breakpoint('xs') {
+            margin-top: -128px;
+        }
+
+        .price-table {
+            margin: auto;
+        }
+    }
+
+}
+
+.width-100{
+    width: 100%;
+}
+
+.height-100{
+    height: 100%;
+}
+
+.bloque{
+    display: block;
+}
+
+.periodo-container{
+    width: 500px !important;
+    height: 400px !important;
+}
+
+.periodo mat-form-field{
+    width: 100%;
+}

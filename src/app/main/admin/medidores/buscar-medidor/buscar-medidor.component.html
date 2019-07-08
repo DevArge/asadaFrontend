@@ -1,0 +1,77 @@
+<div id="faq" class="page-layout simple full-width">
+
+    <!-- HEADER -->
+    <div class="header-buscar accent p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+  
+        <div class="hero-text mb-16">
+            <h1>Busca y selecciona un abonado</h1>
+        </div>
+  
+        <div class="search mat-elevation-z7" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon>search</mat-icon>
+            <input #buscar (keyup)="termino.next(buscar.value)" placeholder="Buscar Abonado" fxFlex>
+        </div> 
+  
+    </div>
+    <!-- / HEADER -->
+  
+    <!-- CONTENT -->
+    <div class="content px-16 py-24 px-sm-24 py-sm-32">
+
+        <div class="content" fxLayout="column" fxLayoutAlign="center center" *ngIf="longitudTermino.length == 0">
+            <div class="error-code"><mat-icon class="icono-grande">error_outline</mat-icon></div>
+            <div class="message" *ngIf="sinResultados">No se han encontrado resultados!</div>
+            <div class="message" *ngIf="sinResultados == false && longitudTermino == ''">Aquí se mostrará los resultados de la busqueda!</div>
+        </div>
+
+  
+      <div class="content-card loader-container" *ngIf="longitudTermino.length > 0">
+  
+        <!-- <mat-table [dataSource]="dataSource" [@animateStagger]="{value:'50'}"> -->
+        <mat-table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+  
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+            <mat-cell *matCellDef="let row" > {{row.id}} </mat-cell>
+          </ng-container>
+  
+          <!-- ID Column -->
+          <ng-container matColumnDef="cedula">
+            <mat-header-cell *matHeaderCellDef> Cédula </mat-header-cell>
+            <mat-cell *matCellDef="let row" > {{row.cedula}} </mat-cell>
+          </ng-container>
+  
+          <!-- Name Column -->
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let row" > {{row.nombre}} </mat-cell>
+          </ng-container>
+  
+          <!-- Progress Column -->
+          <ng-container matColumnDef="apellido1">
+            <mat-header-cell *matHeaderCellDef> Primer Apellido </mat-header-cell>
+            <mat-cell  *matCellDef="let row" > {{row.apellido1}} </mat-cell>
+          </ng-container>
+   
+          <!-- Progress Column -->
+          <ng-container matColumnDef="apellido2">
+            <mat-header-cell *matHeaderCellDef> Segundo Apellido </mat-header-cell>
+            <mat-cell  *matCellDef="let row" > {{row.apellido2}} </mat-cell>
+          </ng-container>
+  
+  
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"
+                    class="contact"
+                    (click)="asignarMedidor(row)"
+                    matRipple
+                    [@animate]="{value:'*',params:{y:'100%'}}"></mat-row >
+        </mat-table>
+  
+    </div>
+  </div>
+  
+    </div>
+    <!-- / CONTENT -->
+  

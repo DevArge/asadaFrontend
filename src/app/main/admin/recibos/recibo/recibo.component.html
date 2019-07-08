@@ -1,0 +1,193 @@
+<div class="page-layout simple fullwidth">
+
+    <!-- HEADER -->
+    <div iv class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="ruta">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h2>Recibo del medidor #{{recibo.medidor}} {{recibo.detalle}} </h2>
+        </div>
+        <button mat-raised-button (click)="pagarRecibo()" *ngIf="recibo.estado === estado"
+            class="pagar-button">
+            <mat-icon>local_atm</mat-icon> 
+            <span> PAGAR RECIBO</span> 
+        </button>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+
+        <div id="invoice" class="compact page-layout blank  scroll-lateral" fxLayout="row">
+
+            <div class="invoice-container">
+
+                <!-- INVOICE -->
+                <div class="card">
+
+                    <div class="header">
+                        <div class="invoice-date">Periodo de {{recibo.periodo | periodo}}</div>
+
+                        <div fxLayout="row" fxLayoutAlign="space-between stretch">
+                            <div class="client">
+                                <div class="invoice-number" fxLayout="row" fxLayoutAlign="start center">
+                                    <span class="title">Número de recibo:</span>
+                                    <span class="number">{{recibo.id}}</span>
+                                </div>
+
+                                <div class="due-date" fxLayout="row" fxLayoutAlign="start center">
+                                    <span class="title">Fecha de vencimiento:</span>
+                                    <span class="date">{{recibo.vence}}</span>
+                                </div>
+
+                                <div class="due-date" fxLayout="row" fxLayoutAlign="start center">
+                                    <span class="title">Estado del recibo:</span>
+                                    <span class="date">{{recibo.estado}}</span>
+                                </div>
+
+                                <div class="info">
+                                    <div class="title">
+                                        {{recibo.nombre + ' ' + recibo.apellido1 + ' ' + recibo.apellido2}}</div>
+                                    <div class="address">{{recibo.direccion}}</div>
+                                </div>   
+                            </div>   
+
+                            <div class="issuer accent" fxLayout="row" fxLayoutAlign="start center">
+                                <div class="logo">
+                                    <img src="assets/images/logos/fuse.svg">
+                                </div>
+
+                                <div class="info">
+                                    <div class="title">{{_asadaService?.nombre}}</div>
+                                    <div class="address">{{_asadaService?.direccion}}</div>
+                                    <div class="phone">Teléfono: {{_asadaService?.telefono}}</div>
+                                    <div class="email">Cédula jurídica: {{_asadaService?.cedulaJuridica}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <table class="simple invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>DETALLE</th>
+                                    <th class="text-right">COSTO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="recibo.abonoMedidor > 0">
+                                    <td>
+                                        <div class="title">Abono de medidor: </div>
+                                    </td>
+                                    <td class="text-right"> ₡{{recibo.abonoMedidor}} </td>
+                                </tr>
+                                <tr *ngIf="recibo.reparacion > 0">
+                                    <td>
+                                        <div class="title">Reparación de medidor: </div>
+                                    </td>
+                                    <td class="text-right"> ₡{{recibo.reparacion}} </td>
+                                </tr>
+                                <tr *ngIf="recibo.reactivacionMedidor > 0">
+                                    <td>
+                                        <div class="title">Reactivación del medidor: </div>
+                                    </td>
+                                    <td class="text-right"> ₡{{recibo.reactivacionMedidor}} </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="title">Hidrante: </div>
+                                    </td>
+                                    <td class="text-right"> ₡{{recibo.hidrante}} </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="title">Consumo: </div>
+                                    </td>
+                                    <td class="text-right"> ₡{{recibo.metros * recibo.valorMetro}} </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="title">Cargo fijo: </div>
+                                    </td>
+                                    <td class="text-right"> ₡{{recibo.cargoFijo}} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="simple invoice-table-footer">
+                            <tbody>
+                                <tr class="subtotal">
+                                    <td>SUBTOTAL</td>
+                                    <td>₡{{recibo.total - recibo.retrasoPago}}</td>
+                                </tr>
+                                <tr class="tax" *ngIf="recibo.retrasoPago > 0">
+                                    <td>Impuesto retraso</td>
+                                    <td>₡{{recibo.retrasoPago}}</td>
+                                </tr>
+                                <tr class="total">
+                                    <td>TOTAL</td>
+                                    <td>₡{{recibo.total}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="footer">
+                        <div class="note">Nota:</div>
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <div class="logo">
+                                <img src="assets/images/logos/fuse.svg">
+                            </div>
+                            <div class="small-note">
+                                {{_confService?.notificacionDefault}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--
+
+            Use the following elements to add breaks to your pages. This will make sure that the section in between
+            these elements will be printed on a new page. The following two elements must be used before and after the
+            page content that you want to show as a new page. So, you have to wrap your content with them.
+
+            Elements:
+            ---------
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            -->
+
+                    <!--
+
+            Example:
+            --------
+
+            Initial page content!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            This is the second page!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            This is the third page!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            -->
+
+                </div>
+                <!-- / INVOICE -->
+
+            </div>
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

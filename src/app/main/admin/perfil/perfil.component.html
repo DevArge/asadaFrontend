@@ -1,0 +1,117 @@
+<div id="product" class="page-layout carded fullwidth inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- HEADER -->
+    <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+          group
+        </mat-icon>
+        <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          Perfil
+        </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <button mat-raised-button [ngClass]="{'boton-none': currentTab != 'Información del perfil'}"
+        [disabled]="informacionForm.invalid || informacionForm.pristine" (click)="guardarInformacion()">
+        <span>Guardar Perfil</span>
+      </button>
+
+      <button mat-raised-button [ngClass]="{'boton-none': currentTab != 'Cambiar contraseña'}"
+        [disabled]="passwordForm.invalid || passwordForm.pristine" (click)="guardarPassword()">
+        <span>Actualizar contraseña</span>
+      </button>
+
+
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+
+      <!-- CONTENT -->
+      <div class="content">
+
+
+        <mat-tab-group (selectedTabChange)="tabActiva($event)" *ngIf="informacionForm">
+
+          <mat-tab label="Información del perfil">
+            <form name="informacionForm" [formGroup]="informacionForm" class="product w-100-p" fxLayout="column" fxFlex>
+              <div class="tab-content p-24" fusePerfectScrollbar>
+
+                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label class="label-blue">Nombre:</mat-label>
+                  <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                  <input name="nombre" formControlName="nombre" matInput required>
+                  <mat-error>Este campo es requerido!</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                  <mat-label class="label-green">Email:</mat-label>
+                  <mat-icon matSuffix class="secondary-text">email</mat-icon>
+                  <input name="email" formControlName="email" matInput type="email">
+                  <mat-error>Este campo es requerido!</mat-error>
+                </mat-form-field>
+              </div>
+            </form>
+          </mat-tab>
+
+          <mat-tab label="Cambiar contraseña">
+
+            <div class="tab-content" fusePerfectScrollbar>
+
+
+              <form name="passwordForm" [formGroup]="passwordForm" class="product w-100-p" fxLayout="column" fxFlex>
+                <div class="tab-content p-24" fusePerfectScrollbar>
+
+                  <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Contraseña actual</mat-label>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <input name="oldPassword" type="password" formControlName="oldPassword" matInput>
+                    <mat-error>Este campo es requerido!</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Nueva contraseña</mat-label>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <input name="newPassword" type="password" formControlName="newPassword" matInput>
+                    <mat-error>Este campo es requerido!</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                    <mat-label>Repetir contraseña</mat-label>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <input name="newPassword2" type="password" formControlName="newPassword2" matInput>
+                    <mat-error>Este campo es requerido!</mat-error>
+                  </mat-form-field>
+
+                </div>
+              </form>
+
+            </div>
+
+          </mat-tab>
+
+        </mat-tab-group>
+
+
+
+      </div>
+      <!-- / CONTENT -->
+
+    </div>
+    <!-- / CONTENT CARD -->
+
+  </div>
+  <!-- / CENTER -->
+
+</div>

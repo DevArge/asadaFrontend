@@ -1,0 +1,146 @@
+<div id="abonados" class="page-layout carded fullwidth inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- HEADER -->
+    <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+      fxLayoutAlign.gt-sm="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+          group
+        </mat-icon>
+        <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          Abonados
+        </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <!-- SEARCH -->
+      <div class="search-wrapper mx-32 mx-md-0">
+        <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon>search</mat-icon>
+          <input #buscar placeholder="Buscar Abonado" (keyup)="termino.next(buscar.value)">
+        </div>
+      </div>
+      <!-- / SEARCH -->
+
+      <!-- ADD BUTTON -->
+      <button mat-raised-button (click)="AgregarAbonado()" class="add-product-button fuse-white mt-24 mt-md-0">
+        <mat-icon>person_add</mat-icon>
+        <span> ABONADO</span>
+      </button>
+      <!-- / ADD BUTTON -->
+
+    </div>
+    <!-- / HEADER -->
+
+
+
+    <!-- CONTENT CARD -->
+    <div class="content-card loader-container">
+
+      <div class="background-loader" *ngIf="estaCargando || huboErrorAlcargar">
+        <mat-spinner *ngIf="estaCargando" color="accent"></mat-spinner>
+        <div class="limit-time-error" *ngIf="huboErrorAlcargar">
+          Hubo un Error al cargar la información.
+        </div>
+      </div>
+
+      <mat-table [dataSource]="dataSource" matSort fusePerfectScrollbar [@animateStagger]="{value:'50'}"
+        (matSortChange)="ordenarColumna($event)">
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+        </ng-container>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="cedula">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Cédula </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.cedula}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="nombre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="apellido1">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Primer Apellido </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.apellido1}} </mat-cell>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="apellido2">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Segundo Apellido </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.apellido2}} </mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="telefono">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Telefono </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.telefono}} </mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="plano">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Número de Plano </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.plano}} </mat-cell>
+        </ng-container>
+
+
+        <!-- Buttons Column -->
+        <!-- <ng-container matColumnDef="editar">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <div fxFlex="row" fxLayoutAlign="end">
+                    <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                            (click)="$event.stopPropagation();">
+                        <mat-icon class="secondary-text">more_vert</mat-icon>
+                    </button>
+                    <mat-menu #moreMenu="matMenu">
+                        <button mat-menu-item aria-label="remove" (click)="eliminarAbonado(row)">
+                            <mat-icon>delete</mat-icon>
+                            <span>Remove</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </mat-cell>
+        </ng-container> -->
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="contact" (click)="editarAbonado(row)" matRipple
+          [@animate]="{value:'*',params:{y:'100%'}}"></mat-row>
+      </mat-table>
+
+      <div class="example-button-row">
+        <button mat-button color="primary" [disabled]="desde == 0 || estaCargando" (click)="paginaAnterior()">
+          <mat-icon>arrow_back_ios</mat-icon>Anterior
+        </button>
+        <button mat-button color="primary" [disabled]="(desde + abonados.length) == total || estaCargando"
+          (click)="paginaSiguiente()">Siguiente<mat-icon>arrow_forward_ios</mat-icon></button>
+        Registros por página:
+        <mat-form-field>
+          <mat-select #select [ngModel]="cantidad" (selectionChange)="tamanioPagina(select)">
+            <mat-option [value]="10">10</mat-option>
+            <mat-option [value]="50">50</mat-option>
+            <mat-option [value]="100">100</mat-option>
+          </mat-select>
+        </mat-form-field>
+        mostrando {{desde +1}} - {{desde + abonados.length}} de {{total}}
+      </div>
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

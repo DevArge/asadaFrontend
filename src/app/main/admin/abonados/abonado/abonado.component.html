@@ -1,0 +1,117 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+          <span class="title dialog-title">{{dialogTitle}}</span>
+          <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+              <mat-icon>close</mat-icon>
+          </button>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row class="toolbar-bottom py-16" fxLayout="column" fxLayoutAlign="center center">
+          <img src="./assets/images/avatars/profile.jpg" class="avatar contact-avatar huge m-0"
+               [alt]="abonado.nombre"/>
+          <div class="contact-name mt-8">{{abonado.nombre}} {{abonado.apellido1}}</div>
+      </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+
+      <form [formGroup]="abonadoForm">
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Cédula</mat-label>
+                    <mat-icon matSuffix class="secondary-text">domain</mat-icon>
+                    <input name="cedula" formControlName="cedula" matInput required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Nombre</mat-label>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <input name="nombre" formControlName="nombre" matInput required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Primer Apellido</mat-label>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <input name="apellido1" formControlName="apellido1" matInput required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Segundo Apellido</mat-label>
+                    <mat-icon matSuffix class="secondary-text">star</mat-icon>
+                    <input name="apellido2" formControlName="apellido2" matInput required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Número de Teléfono</mat-label>
+                    <mat-icon matSuffix class="secondary-text">phone</mat-icon>
+                    <input formControlName="telefono" matInput required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Email</mat-label>
+                    <mat-icon matSuffix class="secondary-text">email</mat-icon>
+                    <input name="email" formControlName="email" matInput type="email">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Numero de plano</mat-label>
+                    <mat-icon matSuffix class="secondary-text">work</mat-icon>
+                    <input name="plano" formControlName="plano" matInput>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Dirección</mat-label>
+                    <textarea name="direccion" formControlName="direccion" matInput type="text" max-rows="4"></textarea>
+                </mat-form-field>
+            </div>
+      </form>
+
+  </div>
+
+  <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
+
+      <button *ngIf="action === 'editar'"
+              mat-button
+              class="mr-8"
+              (click)="matDialogRef.close(['eliminar',abonadoForm])"
+              aria-label="Delete"
+              matTooltip="Delete">
+          ELIMINAR
+      </button>
+
+      <button *ngIf="action !== 'editar'"
+              mat-button
+              class="save-button"
+              (click)="matDialogRef.close(abonadoForm)"
+              [disabled]="abonadoForm.invalid"
+              aria-label="SAVE">
+          CREAR
+      </button>
+
+      <button *ngIf="action === 'editar'"
+              mat-button
+              class="save-button"
+              (click)="matDialogRef.close(['guardar',abonadoForm])"
+              [disabled]="abonadoForm.invalid"
+              aria-label="SAVE">
+          GUARDAR
+      </button>
+
+  </div>
+</div>

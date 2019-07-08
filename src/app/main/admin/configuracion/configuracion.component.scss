@@ -1,0 +1,56 @@
+.background-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .limit-time-error {
+    color: #980000;
+    max-width: 360px;
+    text-align: center;
+  }
+
+  .loader-container {
+    position: relative;
+    height: 420px;
+  }
+
+.label-blue{
+  color: #0073b7;
+}
+
+.label-green{
+  color: #00a65a;
+}
+
+.label-orange{
+  color: #f39c12;
+}
+
+.label-orange-2{
+  color: #d05f2f;
+}
+
+.label-blue, .label-green, .label-orange, .label-orange-2{
+  font-weight: bold;
+}
+.align-center{
+  vertical-align: text-top;
+}
+
+.boton-none{
+  display: none;
+}
+
+.mat-row {
+  position: relative;
+  cursor: pointer;
+  padding: 0px;
+}

@@ -1,0 +1,130 @@
+<div class="page-layout simple fullwidth">
+    <div style="height: 100vh;">
+
+        <mat-toolbar class="fuse-white-bg">
+
+            <div class="logo">
+                <img class="logo-icon" src="assets/images/logos/fuse.svg">
+                <span class="logo-text secondary-text">ASADA</span>
+            </div>
+
+            <span class="example-spacer"></span>
+
+            <div fxShow="true" fxHide.lt-md="true" style="width: 100%; text-align: right;">
+                <!-- The following menu items will be hidden on both SM and XS screen sizes -->
+                <a [ngx-scroll-to]="'#slider'" mat-button>Home</a>
+                <a routerLink="/consulta" mat-button>Cosultar recibo</a>
+                <a [ngx-scroll-to]="'#quienesomos'" mat-button>Quines somos</a>
+                <a [ngx-scroll-to]="'#tarifas'" mat-button>Tarifas</a>
+                <a [ngx-scroll-to]="'#footer'" mat-button>Contactanos</a>
+                <a routerLink="/login" mat-button>Iniciar Sesión</a>
+            </div>
+
+            <div fxShow="true" fxHide.gt-sm="true" id="menu-toggle">
+
+                <a id="menu-btn" href="#" (click)="sidenav.toggle()" style="width: 100%; text-align: right;">
+                    <mat-icon>dehaze</mat-icon>
+                </a>
+
+            </div>
+
+        </mat-toolbar>
+
+        <mat-sidenav-container fxFlexFill class="example-container">
+
+            <mat-sidenav #sidenav fxLayout="column">
+
+                <div fxLayout="column">
+                    <!-- <a (click)="sidenav.toggle()" href="#" mat-button>Close</a> -->
+                    <a [ngx-scroll-to]="'#slider'" mat-button>Home</a>
+                    <a routerLink="/consulta" mat-button>Cosultar recibo</a>
+                    <a [ngx-scroll-to]="'#quienesomos'" mat-button>Quines somos</a>
+                    <a [ngx-scroll-to]="'#tarifas'" mat-button>Tarifas</a>
+                    <a [ngx-scroll-to]="'#footer'" mat-button>Contactanos</a>
+                    <a routerLink="/login" mat-button>Iniciar Sesión</a>
+
+                </div>
+
+            </mat-sidenav>
+
+            <mat-sidenav-content fxFlexFill>
+                <div style="display:block;" id="slider">
+                    <slideshow #slideshow [imageUrls]="imageUrls" height="500px" [autoPlay]="true"></slideshow>
+                </div>
+                <mat-grid-list cols="1" rowHeight="250px">
+                    <mat-grid-tile class="fuse-white-400-bg content-home">
+                        <h2 class="home-title consultar-title">Consulta tus recibos</h2>
+                        <p style="text-align: center;">En este apartado podras consultar tus recibos pendientes y los de
+                            periodos anteriores.</p>
+                        <div class="btn-container"><a href="/consulta" class="btn-consultar">CONSULTAR</a></div>
+                    </mat-grid-tile>
+                </mat-grid-list>
+                <mat-grid-list cols="2" rowHeight="450px">
+                    <mat-grid-tile class="fuse-white-500-bg content-home" id="quienesomos">
+                        <h3 class="home-title">QUIENES SOMOS?</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo aut doloribus eligendi eos,
+                            deleniti officiis harum unde ab,
+                            nesciunt commodi necessitatibus impedit ipsum veritatis corrupti tempore suscipit magni
+                            quas? Libero!
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi nisi ipsa fugit, vel
+                            cupiditate neque, voluptatibus quidem adipisci et magni corrupti eius nulla? Quis sequi
+                            aliquid rerum optio modi dolore.</p>
+                    </mat-grid-tile>
+                    <mat-grid-tile><img src="assets/images/home/asada.jpg" alt="Asada"></mat-grid-tile>
+                    <mat-grid-tile><img src="assets/images/home/estudios.jpg" alt="Asada"></mat-grid-tile>
+                    <mat-grid-tile class="fuse-white-500-bg content-home">
+                        <h3 class="home-title">VISIÓN</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo aut doloribus eligendi eos,
+                            deleniti officiis harum unde ab,
+                            nesciunt commodi necessitatibus impedit ipsum veritatis corrupti tempore suscipit magni
+                            quas? Libero!</p>
+                        <h3 class="home-title">MISIÓN</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo aut doloribus eligendi eos,
+                            deleniti officiis harum unde ab,
+                            nesciunt commodi necessitatibus impedit ipsum veritatis corrupti tempore suscipit magni
+                            quas? Libero!</p>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="1" rowHeight="300px" id="tarifas">
+                    <mat-grid-tile class="fuse-white-400-bg content-home">
+                        <h2 class="home-title consultar-title">Tarifas</h2>
+                        <p style="text-align: center;">Las tarifas de los medidores van a depender del consumo que pueda
+                            tener cada medidor en el rango de la siguiente tabla.</p>
+                        <table class="tarifa-table">
+                            <thead>
+                                <tr>
+                                    <th class="head-table">1 a 10 Metros³</th>
+                                    <th class="head-table">11 a 30 Metros³</th>
+                                    <th class="head-table">31 a 60 Metros³</th>
+                                    <th class="head-table-last">Mas de 60 Metros³</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p class="precio-table"><b>₡150</b></p>
+                                    </td>
+                                    <td>
+                                        <p class="precio-table"><b>₡150</b></p>
+                                    </td>
+                                    <td>
+                                        <p class="precio-table"><b>₡200</b></p>
+                                    </td>
+                                    <td>
+                                        <p class="precio-table-last"><b>₡200</b></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-grid-tile>
+                </mat-grid-list>
+                <app-footer></app-footer>
+            </mat-sidenav-content>
+
+        </mat-sidenav-container>
+
+    </div>
+
+</div>

@@ -1,0 +1,154 @@
+<div class="page-layout simple fullwidth">
+
+  <!-- HEADER -->
+  <div iv class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <button mat-icon-button class="mr-0 mr-sm-16" routerLink="admin/seleccionar-periodo/cuentas">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+        Cuentas del periodo de {{periodo | periodo }}
+      </span>
+    </div>
+    <button mat-raised-button class="pagar-button" (click)="exportarExcel()">
+      <mat-icon>get_app</mat-icon>
+      <span> Exportar a Excel</span>
+    </button>
+  </div>
+  <!-- / HEADER -->
+
+
+  <!-- CONTENT -->
+  <div class="content p-24">
+
+    <mat-chip-list class="mat-chip-list-stacked">
+      <mat-chip selected color="primary">
+        <span class="texto-centrado">TOTALES GENERALES</span>
+      </mat-chip>
+    </mat-chip-list>
+
+    <br>
+
+    <table mat-table [dataSource]="cuentas" class="mat-elevation-z8">
+      <ng-container matColumnDef="abonoMedidor">
+        <th mat-header-cell *matHeaderCellDef> Abonos de medidores </th>
+        <td mat-cell *matCellDef="let element"> ₡{{element.abonoMedidor}} </td>
+      </ng-container>
+      <ng-container matColumnDef="cargoFijo">
+        <th mat-header-cell *matHeaderCellDef> Cargos fijos </th>
+        <td mat-cell *matCellDef="let element"> ₡{{element.cargoFijo}} </td>
+      </ng-container>
+      <ng-container matColumnDef="consumo">
+        <th mat-header-cell *matHeaderCellDef> Consumos </th>
+        <td mat-cell *matCellDef="let element"> ₡{{element.consumo}} </td>
+      </ng-container>
+      <ng-container matColumnDef="hidrante">
+        <th mat-header-cell *matHeaderCellDef> Hidrantes </th>
+        <td mat-cell *matCellDef="let element"> ₡{{element.hidrante}} </td>
+      </ng-container>
+      <ng-container matColumnDef="reactivacionMedidor">
+        <th mat-header-cell *matHeaderCellDef> Reactivaciones </th>
+        <td mat-cell *matCellDef="let element"> ₡{{element.reactivacionMedidor}} </td>
+      </ng-container>
+      <ng-container matColumnDef="reparacion">
+        <th mat-header-cell *matHeaderCellDef> Reparaciones </th>
+        <td mat-cell *matCellDef="let element"> ₡{{element.reparacion}} </td>
+      </ng-container>
+      <ng-container matColumnDef="retrasoPago">
+        <th mat-header-cell *matHeaderCellDef> Impuesto retrasos </th>
+        <td mat-cell *matCellDef="let element"> ₡{{element.retrasoPago}} </td>
+      </ng-container>
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> Total general </th>
+        <td mat-cell *matCellDef="let element"> ₡{{element.total}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnasCuentas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasCuentas;"></tr>
+    </table>
+
+    <br>
+
+    <mat-chip-list class="mat-chip-list-stacked">
+      <mat-chip selected color="primary">
+        <span class="texto-centrado">DETALLE DE RECIBOS</span>
+      </mat-chip>
+    </mat-chip-list>
+
+
+    <mat-form-field>
+      <input matInput #buscar (keyup)="termino.next(buscar.value)" placeholder="Buscar recibo" autocomplete="off">
+    </mat-form-field>
+
+    <table mat-table [dataSource]="recibos" class="mat-elevation-z8">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="abonado">
+        <th mat-header-cell *matHeaderCellDef> Abonado </th>
+        <td mat-cell *matCellDef="let row">
+          {{row.abonado +  ' ' + row.nombre + ' ' + row.apellido1 + ' ' + row.apellido2 }} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="medidor">
+        <th mat-header-cell *matHeaderCellDef> Medidor </th>
+        <td mat-cell *matCellDef="let row"> #{{row.medidor + ' ' + row.detalle}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="cargo">
+        <th mat-header-cell *matHeaderCellDef> Cargo Fijo </th>
+        <td mat-cell *matCellDef="let row"> ₡{{row.cargoFijo}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="hidrante">
+        <th mat-header-cell *matHeaderCellDef> Hidrante </th>
+        <td mat-cell *matCellDef="let row"> ₡{{row.hidrante}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->  
+      <ng-container matColumnDef="consumo">
+        <th mat-header-cell *matHeaderCellDef> Consumo </th>
+        <td mat-cell *matCellDef="let row"> ₡{{row.valorMetro * row.metros}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="otros">
+        <th mat-header-cell *matHeaderCellDef> Otros </th>
+        <td mat-cell *matCellDef="let row"> ₡{{calcularOtros(row.reactivacionMedidor, row.reparacion, row.retrasoPago, row.abonoMedidor )}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> Total </th>
+        <td mat-cell *matCellDef="let row"> ₡{{row.total}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnaRecibos"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnaRecibos;"></tr>
+    </table>
+
+    <div class="example-button-row">
+      <button mat-button color="primary" 
+              [disabled]="desde == 0 || estaCargando"
+              (click)="paginaAnterior()"><mat-icon>arrow_back_ios</mat-icon>Anterior</button>
+      <button mat-button color="primary"  
+              [disabled]="(desde + recibos.length) == total || estaCargando"
+              (click)="paginaSiguiente()">Siguiente<mat-icon>arrow_forward_ios</mat-icon></button>
+      Registros por página:
+      <mat-form-field> 
+          <mat-select #select [ngModel]="cantidad" (selectionChange)="tamanioPagina(select)">
+              <mat-option [value]="10">10</mat-option>
+              <mat-option [value]="50">50</mat-option>
+              <mat-option [value]="100">100</mat-option>
+          </mat-select> 
+      </mat-form-field>
+      mostrando {{desde +1}} - {{desde + recibos.length}} de {{total}}
+  </div>
+
+
+
+  </div>
+  <!-- / CONTENT -->
+
+</div>

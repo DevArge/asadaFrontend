@@ -1,0 +1,135 @@
+<div id="abonados" class="page-layout carded fullwidth inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/admin/seleccionar-medidor/lecturas'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div class="product-image mr-8 mr-sm-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    <!-- <img src="./assets/images/avatars/profile.jpg" class="avatar contact-avatar huge m-0" [alt]="abonado.nombre" /> -->
+                    <img src="./assets/images/avatars/profile.jpg" class="avatar contact-avatar huge m-0" />
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+
+                    <div class="h2">
+                        Medidor: #{{idMedidor}}
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                  <mat-menu #appMenu="matMenu">
+                    <button mat-menu-item>Exportar a excel</button>
+                    <button mat-menu-item>Help</button>
+                  </mat-menu>
+        
+                  <button mat-icon-button [matMenuTriggerFor]="appMenu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </span>
+              </div>
+
+
+        </div>
+        <!-- / HEADER -->
+
+
+
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+
+      <div class="background-loader" *ngIf="estaCargando || huboErrorAlcargar">
+        <mat-spinner *ngIf="estaCargando" color="accent"></mat-spinner>
+        <div class="limit-time-error" *ngIf="huboErrorAlcargar">
+          Hubo un Error al cargar la información.
+        </div>
+      </div>
+
+      <mat-table [dataSource]="dataSource" matSort fusePerfectScrollbar [@animateStagger]="{value:'50'}"
+        (matSortChange)="ordenarColumna($event)">
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="nombre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="apellido1">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> 1er Apellido </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.apellido1}} </mat-cell>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="apellido2">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> 2do Apellido </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.apellido2}} </mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="detalle">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Detalle </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.detalle}} </mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="lectura">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Lectura</mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.lectura}} ³</mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="metros">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Metros </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.metros}} ³</mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="periodo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Periodo </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.periodo | periodo}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="contact" matRipple [@animate]="{value:'*',params:{y:'100%'}}"></mat-row>
+      </mat-table>
+
+      <div class="example-button-row">
+        <button mat-button color="primary" [disabled]="desde == 0 || estaCargando" (click)="paginaAnterior()">
+          <mat-icon>arrow_back_ios</mat-icon>Anterior
+        </button>
+        <button mat-button color="primary" [disabled]="(desde + lecturas.length) == total || estaCargando" (click)="paginaSiguiente()">Siguiente<mat-icon>arrow_forward_ios</mat-icon></button>
+        Registros por página:
+        <mat-form-field>
+          <mat-select #select [ngModel]="cantidad" (selectionChange)="tamanioPagina(select)">
+            <mat-option [value]="10">10</mat-option>
+            <mat-option [value]="50">50</mat-option>
+            <mat-option [value]="100">100</mat-option>
+          </mat-select>
+        </mat-form-field>
+        mostrando {{desde +1}} - {{desde + lecturas.length}} de {{total}}
+      </div>
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

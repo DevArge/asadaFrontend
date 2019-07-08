@@ -1,0 +1,95 @@
+<div id="abonados" class="page-layout carded fullwidth inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- HEADER -->
+    <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+      fxLayoutAlign.gt-sm="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+          group
+        </mat-icon>
+        <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          Historial de movimientos
+        </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <!-- SEARCH -->
+      <!-- <div class="search-wrapper mx-32 mx-md-0">
+        <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon>search</mat-icon>
+          <input #buscar placeholder="Buscar Usuario" (keyup)="termino.next(buscar.value)">
+        </div>
+      </div> -->
+      <!-- / SEARCH -->
+
+    </div>
+    <!-- / HEADER -->
+
+
+
+    <!-- CONTENT CARD -->
+    <div class="content-card loader-container">
+
+      <div class="background-loader" *ngIf="estaCargando || huboErrorAlcargar">
+        <mat-spinner *ngIf="estaCargando" color="accent"></mat-spinner>
+        <div class="limit-time-error" *ngIf="huboErrorAlcargar">
+          Hubo un Error al cargar la información.
+        </div>
+      </div>
+
+      <mat-table [dataSource]="dataSource" matSort fusePerfectScrollbar [@animateStagger]="{value:'50'}"
+        (matSortChange)="ordenarColumna($event)">
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="nombre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="actividad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Actividad </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.actividad}} </mat-cell>
+        </ng-container>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="created_at">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Efectuada </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.created_at}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="contact" matRipple
+          [@animate]="{value:'*',params:{y:'100%'}}" (click)="verDetalle(row.detalle)"></mat-row>
+      </mat-table>
+
+      <div class="example-button-row">
+        <button mat-button color="primary" [disabled]="desde == 0 || estaCargando" (click)="paginaAnterior()">
+          <mat-icon>arrow_back_ios</mat-icon>Anterior
+        </button>
+        <button mat-button color="primary" [disabled]="(desde + historiales.length) == total || estaCargando"
+          (click)="paginaSiguiente()">Siguiente<mat-icon>arrow_forward_ios</mat-icon></button>
+        Registros por página:
+        <mat-form-field>
+          <mat-select #select [ngModel]="cantidad" (selectionChange)="tamanioPagina(select)">
+            <mat-option [value]="10">10</mat-option>
+            <mat-option [value]="50">50</mat-option>
+            <mat-option [value]="100">100</mat-option>
+          </mat-select>
+        </mat-form-field>
+        mostrando {{desde +1}} - {{desde + historiales.length}} de {{total}}
+      </div>
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

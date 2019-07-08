@@ -1,0 +1,96 @@
+@import "src/@fuse/scss/fuse";
+
+    .header-buscar {
+        flex: 1 0 auto;
+        height: 220px;
+        max-height: 220px;
+        background: #1A237E;
+        background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+
+        @include media-breakpoint('xs') {
+            height: 240px;
+            padding: 16px;
+        }
+
+        .hero-text {
+
+            h1 {
+                color: white;
+                font-size: 30px;
+                font-weight: 400;
+                letter-spacing: 0.01em;
+                text-align: center;
+                margin-top: 0;
+                margin-bottom: 16px;
+
+                @include media-breakpoint('xs') {
+                    font-size: 24px;
+                }
+            }
+        }
+
+        .search {
+            width: 100%;
+            max-width: 640px;
+            height: 56px;
+            line-height: 56px;
+            padding: 18px;
+            border-radius: 28px;
+            overflow: hidden;
+            background: white;
+            .mat-icon{
+                color: rgba(0, 0, 0, 0.54);
+            }
+            input {
+                height: 56px;
+                padding-left: 16px;
+                border: none;
+                outline: none;
+            }
+        }
+    }
+
+    .content {
+        // max-width: 960px;
+        width: 100%;
+        margin: 0 auto;
+        .error-code {
+            font-size: 112px;
+            text-align: center;
+            line-height: 1;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .message {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .search {
+            width: 100%;
+            height: 56px;
+            line-height: 56px;
+            margin: 48px auto 16px auto;
+            padding: 16px;
+            border: 1px solid;
+            border-radius: 28px;
+
+            input {
+                padding: 0 0 0 16px;
+            }
+        }
+
+        .back-link {
+            font-size: 15px;
+            text-align: center;
+        }
+    }
+
+.icono-grande{
+    font-size: 50px;
+}
+
+.mat-row {
+    cursor: pointer;
+}
