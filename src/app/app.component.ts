@@ -128,7 +128,6 @@ export class AppComponent implements OnInit, OnDestroy
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((config) => {
-
                 setTimeout(() =>{
                     this.fuseConfig = config;
 

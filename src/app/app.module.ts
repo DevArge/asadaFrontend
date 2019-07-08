@@ -7,6 +7,7 @@ import { MatButtonModule, MatIconModule, MatInputModule, MatCheckboxModule, MatF
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
@@ -31,7 +32,7 @@ import { FooterComponent } from './main/layout/footer/footer.component';
         LoginComponent,
         ConsultaComponent,
         FooterComponent,
-        
+       
     ],
     imports     : [
         BrowserModule,
