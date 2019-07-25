@@ -8,10 +8,9 @@
             </button>
             <h2>Recibo del medidor #{{recibo.medidor}} {{recibo.detalle}} </h2>
         </div>
-        <button mat-raised-button (click)="pagarRecibo()" *ngIf="recibo.estado === estado"
-            class="pagar-button">
-            <mat-icon>local_atm</mat-icon> 
-            <span> PAGAR RECIBO</span> 
+        <button mat-raised-button (click)="pagarRecibo()" *ngIf="recibo.estado === estado" class="pagar-button">
+            <mat-icon>local_atm</mat-icon>
+            <span> PAGAR RECIBO</span>
         </button>
     </div>
     <!-- / HEADER -->
@@ -31,7 +30,7 @@
 
                         <div fxLayout="row" fxLayoutAlign="space-between stretch">
                             <div class="client">
-                                <div class="invoice-number" fxLayout="row" fxLayoutAlign="start center">
+                                <div class="due-date" fxLayout="row" fxLayoutAlign="start center">
                                     <span class="title">Número de recibo:</span>
                                     <span class="number">{{recibo.id}}</span>
                                 </div>
@@ -46,12 +45,16 @@
                                     <span class="date">{{recibo.estado}}</span>
                                 </div>
 
-                                <div class="info">
-                                    <div class="title">
-                                        {{recibo.nombre + ' ' + recibo.apellido1 + ' ' + recibo.apellido2}}</div>
-                                    <div class="address">{{recibo.direccion}}</div>
-                                </div>   
-                            </div>   
+                                <div class="due-date" fxLayout="row" fxLayoutAlign="start center">
+                                    <span class="title">Medidor:</span>
+                                    <span class="date">#{{recibo.medidor + ' ' + recibo.detalle}}</span>
+                                </div>
+                                <div class="due-date" fxLayout="row" fxLayoutAlign="start center">
+                                    <span class="title">Abonado:</span>
+                                    <span class="date"> {{recibo.nombre + ' ' + recibo.apellido1 + ' ' + recibo.apellido2}}</span>
+                                </div>
+
+                            </div>
 
                             <div class="issuer accent" fxLayout="row" fxLayoutAlign="start center">
                                 <div class="logo">
@@ -66,6 +69,28 @@
                                 </div>
                             </div>
                         </div>
+                        <table class="simple invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>DETALLE</th>
+                                    <th class="text-right">LECTURA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="title">Lectura anterior: </div>
+                                    </td>
+                                    <td class="text-right">{{recibo.lectura - recibo.metros}}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="title">Lectura actual: </div>
+                                    </td>
+                                    <td class="text-right">{{recibo.lectura}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="content">
@@ -103,7 +128,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div class="title">Consumo: </div>
+                                        <div class="title">Consumo ({{recibo.metros}}³ x {{recibo.valorMetro}}): </div>
                                     </td>
                                     <td class="text-right"> ₡{{recibo.metros * recibo.valorMetro}} </td>
                                 </tr>

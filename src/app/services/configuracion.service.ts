@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { map, catchError } from 'rxjs/operators';
 import { URL_SERVICIOS } from '../config/config';
 import { throwError } from 'rxjs';
@@ -11,7 +11,7 @@ import { isObject } from 'util';
 @Injectable({
   providedIn: 'root'
 })
-export class ConfiguracionService {
+export class ConfiguracionService implements OnInit {
 
   idConfiguracionRecibo:string;
   impuestoRetraso:number;
@@ -21,6 +21,10 @@ export class ConfiguracionService {
   fechaFin:Date;
 
   constructor(private http:HttpClient, private _usuarioService:UsuarioService) { 
+
+  }
+
+  ngOnInit(): void {
     this.obtenerConfiguracion().subscribe((res:any)=>{
       this.idConfiguracionRecibo = res.configuracion.id;
       this.impuestoRetraso = res.configuracion.impuestoRetraso;
@@ -29,11 +33,12 @@ export class ConfiguracionService {
       this.fechaInicio = res.configuracion.fechaInicio;
       this.fechaFin = res.configuracion.fechaFin;
     })
+    
   }
 
   ///// PRECIOS ////
   obtenerPrecios(){
-    let url = URL_SERVICIOS + '/api/configuracion-medidores?token=' + this._usuarioService.token;
+    let url = URL_SERVICIOS + '/api/configuracion-medidores';
     return this.http.get(url);
   }
 

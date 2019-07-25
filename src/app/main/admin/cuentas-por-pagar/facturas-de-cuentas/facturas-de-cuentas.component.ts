@@ -1,16 +1,18 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Subject, Subscription } from 'rxjs';
 import { FacturaService } from '../../../../services/factura.service';
 import swal from 'sweetalert';
 import { fuseAnimations } from '../../../../../@fuse/animations/index';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { ExportarComponent } from './exportar/exportar.component';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-facturas-de-cuentas',
   templateUrl: './facturas-de-cuentas.component.html',
   styleUrls: ['./facturas-de-cuentas.component.scss'],
-  animations   : fuseAnimations,
+  animations: fuseAnimations,
   encapsulation: ViewEncapsulation.None
 })
 export class FacturasDeCuentasComponent implements OnInit, OnDestroy {
@@ -19,94 +21,111 @@ export class FacturasDeCuentasComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['cuenta', 'numero', 'fecha', 'grand_total', 'editar'];
   dataSource: MatTableDataSource<any>;
   dialogRef: any;
-  estaCargando:boolean = true;
-  huboErrorAlcargar:boolean = false;
+  estaCargando: boolean = true;
+  huboErrorAlcargar: boolean = false;
 
-  desde:number = 0;
-  cantidad:number = 10;
-  columna:string = 'id';
-  orden:string = 'asc';
-  facturas:any[] = [];
-  total:number = 0;
+  desde: number = 0;
+  cantidad: number = 10;
+  columna: string = 'id';
+  orden: string = 'asc';
+  facturas: any[] = [];
+  total: number = 0;
   termino = new Subject<string>();
-  subcripciones:Subscription [] = [];
+  subcripciones: Subscription[] = [];
 
-  constructor( private _facturaService:FacturaService, private router:Router) {
+  constructor(private _facturaService: FacturaService, private router: Router, public _matDialog: MatDialog) {
     this.buscarFactura();
   }
-  
+
   ngOnInit() {
     this.cargarFacturas();
   }
 
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subcripciones.forEach(sub => sub.unsubscribe())
   }
 
-  cargarFacturas(){
+  cargarFacturas() {
     this.estaCargando = true;
-    this.subcripciones.push( this._facturaService.obtenerFacturas(this.desde, this.cantidad, this.columna, this.orden)
-      .subscribe((resp:any) =>{
+    this.subcripciones.push(this._facturaService.obtenerFacturas(this.desde, this.cantidad, this.columna, this.orden)
+      .subscribe((resp: any) => {
         this.total = resp.total;
-        this.facturas =resp.facturas;
+        this.facturas = resp.facturas;
         this.dataSource = new MatTableDataSource(this.facturas);
         this.estaCargando = false;
-      }, err=>{
+      }, err => {
         this.huboErrorAlcargar = true;
         this.estaCargando = false;
       })
     )
   }
 
-  AgregarFactura(){
+  AgregarFactura() {
     this.router.navigate(['/admin/factura']);
   }
 
-  eliminarFactura(id:any){
+  eliminarFactura(id: any) {
     this.mostrarSWAEliminar(id);
   }
 
-  mostrarSWAEliminar(id:number){
+  mostrarSWAEliminar(id: number) {
     swal({
       title: "Estas seguro?",
       text: "La factura será eliminada de los registros!",
       icon: "warning",
-      buttons:['Cancelar', 'Aceptar'],
+      buttons: ['Cancelar', 'Aceptar'],
       dangerMode: true,
     })
-    .then((willDelete) => {
-      if (willDelete) {
-        this.subcripciones.push( this._facturaService.eliminarFactura(id).subscribe((res)=>{
+      .then((willDelete) => {
+        if (willDelete) {
+          this.subcripciones.push(this._facturaService.eliminarFactura(id).subscribe((res) => {
             this.cargarFacturas();
           })
-        )
-      } else {
-        swal("El registro no sufrio cambios!", "", "info");
+          )
+        } else {
+          swal("El registro no sufrio cambios!", "", "info");
+        }
+      });
+  }
+
+  exportar() {
+    this.dialogRef = this._matDialog.open(ExportarComponent, {
+      panelClass: 'abonado-form-dialog',
+      data: {
+        action: 'nuevo'
       }
     });
+    this.subcripciones.push( this.dialogRef.afterClosed()
+      .subscribe((response: FormGroup) => {
+        if (!response) {
+          return;
+        }
+        
+      })
+    )
   }
 
   ///==================== TABLA =================//
 
-  buscarFactura(){
+  buscarFactura() {
     this.desde = 0;
     this.estaCargando = true;
-    this.subcripciones.push( this._facturaService.buscarFactura(this.desde, this.cantidad, this.columna, this.orden, this.termino)
-      .subscribe((resp:any) =>{
+    this.subcripciones.push(this._facturaService.buscarFactura(this.desde, this.cantidad, this.columna, this.orden, this.termino)
+      .subscribe((resp: any) => {
         this.total = resp.total;
         this.facturas = resp.cuentas;
         this.dataSource = new MatTableDataSource(this.facturas);
         this.estaCargando = false;
       })
-    ) 
+    )
   }
 
-  ordenarColumna(evento:any){
+  ordenarColumna(evento: any) {
     if (evento.direction == '') {
       this.columna = 'id';
       this.orden = 'asc';
-    }else{
+    } else {
       this.columna = evento.active;
       this.orden = evento.direction;
     }
@@ -114,17 +133,17 @@ export class FacturasDeCuentasComponent implements OnInit, OnDestroy {
     this.cargarFacturas();
   }
 
-  paginaSiguiente(){
+  paginaSiguiente() {
     this.desde = this.desde + this.cantidad;
     this.cargarFacturas();
   }
 
-  paginaAnterior(){
-    this.desde = ( this.desde - this.cantidad) < 0 ? 0 : ( this.desde - this.cantidad);
+  paginaAnterior() {
+    this.desde = (this.desde - this.cantidad) < 0 ? 0 : (this.desde - this.cantidad);
     this.cargarFacturas();
   }
 
-  tamanioPagina(valor:any){
+  tamanioPagina(valor: any) {
     this.desde = 0;
     this.cantidad = valor._value;
     this.cargarFacturas();

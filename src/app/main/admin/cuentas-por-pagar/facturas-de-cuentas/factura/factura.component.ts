@@ -8,6 +8,7 @@ import { MomentDateAdapter,  } from '@angular/material-moment-adapter';
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
 import { Productos } from '../../../../../models/Productos.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 const MY_FORMATS = {
   parse: {
@@ -39,47 +40,47 @@ export class FacturaComponent implements OnInit, OnDestroy {
   cantidad:number;
   totalProduto:number;
   cuentas:Cuenta[]=[];
-
-  subParam:any;
-  subCuenta:any;
-  subCargarFact:any;
-  subFacturaService:any;
+  estaCargando: boolean = true;
+  huboErrorAlcargar: boolean = false;
+  subscripciones:Subscription[]=[];
 
   constructor(private _formBuilder: FormBuilder, 
               private _facturaService:FacturaService, 
               public _cuentaService:CuentasService,
               private router:Router,
               private route:ActivatedRoute) {
-    this.subParam = this.route.params.subscribe(params => {
+    this.subscripciones.push( this.route.params.subscribe(params => {
       if (params['id']) {
         this.cargarFactura(params['id']);
       }else{
         this.factura = new Factura('','','',null,0,0,0,0,'',[new Productos('',0,1,0)]);
         this.facturaForm = this.createFacturaForm();
       }
-    });
-    this.subCuenta = this._cuentaService.obtenerCuentas(0,200,'id','asc').subscribe((res:any)=>{
+    }))
+
+    this.subscripciones.push( this._cuentaService.obtenerCuentas(0,200,'id','asc').subscribe((res:any)=>{
        this.cuentas = res.cuentas;
-    })
+    }))
   }
 
   ngOnInit() {
   }
 
   ngOnDestroy() {
-    if(this.subParam){ this.subParam.unsubscribe(); }
-    if(this.subCuenta){ this.subCuenta.unsubscribe(); }
-    if(this.subCargarFact){ this.subCargarFact.unsubscribe(); }
-    if (this.subFacturaService){ this.subFacturaService.unsubscribe(); }
+    this.subscripciones.forEach(sub => sub.unsubscribe());
   }
 
   cargarFactura(id:any){
-    this.subCargarFact = this._facturaService.obtenerFactura(id).subscribe(
+    this.subscripciones.push( this._facturaService.obtenerFactura(id).subscribe(
       (res:any)=>{
         this.factura = res.factura;
-        this.facturaForm = this.createFacturaForm();        
+        this.facturaForm = this.createFacturaForm();
+        this.estaCargando = false;        
+      },err=>{
+        this.huboErrorAlcargar = true;
+        this.estaCargando = false;        
       }
-    )
+    ))
   }
 
   agregarLinea(){
@@ -109,13 +110,13 @@ export class FacturaComponent implements OnInit, OnDestroy {
     this.factura.fecha = this.formatearFecha();
     this.factura.numero = this.facturaForm.get('numero').value;
     this.factura.grand_total = this.calcularTotal();
-    this.subFacturaService = this._facturaService.crearFactura(this.factura).subscribe(
+    this.subscripciones.push(this._facturaService.crearFactura(this.factura).subscribe(
       (res:any)=>{
         this.router.navigate(['/admin/facturas-de-cuentas']);
       },err=>{
         console.log(err);
       }
-    )
+    ))
   }
 
   actualizarFactura(){
@@ -124,13 +125,13 @@ export class FacturaComponent implements OnInit, OnDestroy {
     this.factura.fecha = this.formatearFecha();
     this.factura.numero = this.facturaForm.get('numero').value;
     this.factura.grand_total = this.calcularTotal();
-    this.subFacturaService = this._facturaService.actualizarFactura(this.factura, this.factura.id).subscribe(
+    this.subscripciones.push( this._facturaService.actualizarFactura(this.factura, this.factura.id).subscribe(
       (res:any)=>{
         this.router.navigate(['/admin/facturas-de-cuentas']);
       },err=>{
         console.log(err);
       }
-    )
+    ))
   }
 
   formatearFecha(){

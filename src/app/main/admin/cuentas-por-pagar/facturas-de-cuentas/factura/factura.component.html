@@ -18,12 +18,14 @@
       </div>
 
       <div *ngIf="factura">
-        <button mat-raised-button (click)="guardarFactura()" *ngIf="!factura.id" [disabled]="facturaForm.invalid || validar()" class="add-product-button fuse-white mt-24 mt-md-0">
+        <button mat-raised-button (click)="guardarFactura()" *ngIf="!factura.id"
+          [disabled]="facturaForm.invalid || validar()" class="add-product-button fuse-white mt-24 mt-md-0">
           <mat-icon>person_add</mat-icon>
           <span> Guardar</span>
         </button>
 
-        <button mat-raised-button (click)="actualizarFactura()" *ngIf="factura.id" [disabled]="facturaForm.invalid || validar()" class="add-product-button fuse-white mt-24 mt-md-0">
+        <button mat-raised-button (click)="actualizarFactura()" *ngIf="factura.id"
+          [disabled]="facturaForm.invalid || validar()" class="add-product-button fuse-white mt-24 mt-md-0">
           <mat-icon>person_add</mat-icon>
           <span> Actualizar</span>
         </button>
@@ -42,10 +44,16 @@
 
       <!-- CONTENT -->
       <div class="content p-24">
+        <div fxLayout="row" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
 
-        <div fxLayout="row" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" *ngIf="factura">
+          <div class="background-loader" *ngIf="estaCargando || huboErrorAlcargar">
+            <mat-spinner *ngIf="estaCargando" color="accent"></mat-spinner>
+            <div class="limit-time-error" *ngIf="huboErrorAlcargar">
+              Hubo un Error al cargar la información.
+            </div>
+          </div>
 
-          <form [formGroup]="facturaForm" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+          <form [formGroup]="facturaForm" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" *ngIf="factura">
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
@@ -59,17 +67,17 @@
               <mat-form-field appearance="outline" floatLabel="always" class="px-8" fxFlex="33">
                 <mat-label>Cuenta:</mat-label>
                 <mat-select formControlName="idCuenta" placeholder="Seleccione una opción">
-                    <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.id">
-                        {{cuenta.codigo + ' - ' + cuenta.nombre }}
-                    </mat-option>
+                  <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.id">
+                    {{cuenta.codigo + ' - ' + cuenta.nombre }}
+                  </mat-option>
                 </mat-select>
                 <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
                 <mat-error>La cuenta es requerida!</mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline" fxFlex="33">
-                <input matInput [matDatepicker]="picker1" formControlName="fecha" type="date"
-                name="fechaInicio" placeholder="Selecciona la fecha en el icono" autocomplete="off">
+                <input matInput [matDatepicker]="picker1" formControlName="fecha" type="date" name="fechaInicio"
+                  placeholder="Selecciona la fecha en el icono" autocomplete="off">
                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker touchUi #picker1></mat-datepicker>
               </mat-form-field>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../config/config';
 import { UsuarioService } from './usuario.service';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 
@@ -13,6 +13,15 @@ export class ReciboService {
 
   constructor(private http:HttpClient, private _usuarioService:UsuarioService) { 
 
+  }
+
+  public cargarRecibosDeUnAbonado(desde:number, cantidad:number, columna:string, orden:string, idAbonado:string): Observable<any[]> {
+    let url = URL_SERVICIOS + `/api/recibos/abonado/${idAbonado}?desde=${desde}&cantidad=${cantidad}&columna=${columna}&orden=${orden}&token=${this._usuarioService.token}`;
+    let url2 = URL_SERVICIOS + `/api/recibos/abonadoPendiente/${idAbonado}?desde=${desde}&cantidad=${cantidad}&columna=${columna}&orden=${orden}&token=${this._usuarioService.token}`;
+    let response1 = this.http.get(url);
+    let response2 = this.http.get(url2);
+    // Observable.forkJoin (RxJS 5) changes to just forkJoin() in RxJS 6
+    return forkJoin([response1, response2]);
   }
 
   cargarRecibos(desde:number, cantidad:number, columna:string, orden:string, periodo:string){

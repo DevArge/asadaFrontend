@@ -21,7 +21,6 @@ import { AnadirReparacionComponent } from './medidores/anadir-reparacion/anadir-
 import { PeriodoComponent } from './periodo/periodo.component';
 import { UnMedidorComponent } from './lecturas/un-medidor/un-medidor.component';
 import { InsertarLecturaComponent } from './lecturas/insertar-lectura/insertar-lectura.component';
-import { PeriodoPipe } from '../../pipes/periodo.pipe';
 import { SeleccionarMedidorComponent } from './seleccionar-medidor/seleccionar-medidor.component';
 import { ReciboComponent } from './recibos/recibo/recibo.component';
 import { RecibosUnMedidorComponent } from './recibos/recibos-un-medidor/recibos-un-medidor.component';
@@ -39,6 +38,8 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { TipoMedidorComponent } from './configuracion/tipo-medidor/tipo-medidor.component';
 import { FacturasDeCuentasComponent } from './cuentas-por-pagar/facturas-de-cuentas/facturas-de-cuentas.component';
 import { FacturaComponent } from './cuentas-por-pagar/facturas-de-cuentas/factura/factura.component';
+import { PipeModule } from 'app/pipes/pipe.module';
+import { ExportarComponent } from './cuentas-por-pagar/facturas-de-cuentas/exportar/exportar.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,6 @@ import { FacturaComponent } from './cuentas-por-pagar/facturas-de-cuentas/factur
     UnMedidorComponent,
     SeleccionarMedidorComponent,
     InsertarLecturaComponent,
-    PeriodoPipe,
     ReciboComponent,
     RecibosUnMedidorComponent,
     CuentasPorCobrarComponent,
@@ -70,8 +70,10 @@ import { FacturaComponent } from './cuentas-por-pagar/facturas-de-cuentas/factur
     TipoMedidorComponent,
     FacturasDeCuentasComponent,
     FacturaComponent,
+    ExportarComponent
   ],
   imports: [
+    PipeModule,
     CommonModule,
     ADMIN_ROUTES,
     MatButtonModule,
@@ -99,13 +101,11 @@ import { FacturaComponent } from './cuentas-por-pagar/facturas-de-cuentas/factur
   ],
   entryComponents:[
     AbonadoComponent,
+    ExportarComponent,
     UsuarioComponent,
     CuentaComponent,
     AnadirReparacionComponent,
     TipoMedidorComponent
-  ],
-  providers:[
-
   ]
 
 })

@@ -45,7 +45,7 @@
             <button mat-raised-button [ngClass]="{'boton-none': currentTab != 'Notificaciones'}"
                 [disabled]="notificacionForm.invalid || notificacionForm.pristine" (click)="guardarNotificaciones()">
                 <span>Guardar Notificaciones</span>
-            </button>  
+            </button>
 
         </div>
         <!-- / HEADER -->
@@ -219,6 +219,13 @@
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label class="label-blue">Correo:</mat-label>
+                                        <input matInput placeholder="Correo" name="correo"
+                                            formControlName="correo" type="text">
+                                        <mat-error>Este campo es requerido!</mat-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                         <mat-label class="label-orange">Teléfono:</mat-label>
                                         <input matInput placeholder="Teléfono" name="telefono"
                                             formControlName="telefono" type="text">
@@ -247,6 +254,7 @@
                                 fxLayout="column" fxFlex>
                                 <div class="tab-content p-24" fusePerfectScrollbar>
 
+                                    <h4>Estas notificaciones apareceran en los recibos.</h4>
                                     <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                         <mat-label>Notificación por defecto:</mat-label>
                                         <textarea name="notificacionDefault" formControlName="notificacionDefault"
@@ -260,16 +268,18 @@
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                                        <input matInput [min]="minDate" [matDatepicker]="picker1" formControlName="fechaInicio"
-                                            name="fechaInicio" placeholder="Choose a date">
+                                        <input matInput [min]="minDate" [matDatepicker]="picker1"
+                                            formControlName="fechaInicio" name="fechaInicio"
+                                            placeholder="Choose a date">
                                         <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                                         <mat-datepicker touchUi #picker1></mat-datepicker>
-                                        <mat-hint align="start">Fecha de inicio para la notificación temporal.</mat-hint>
+                                        <mat-hint align="start">Fecha de inicio para la notificación temporal.
+                                        </mat-hint>
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                                        <input matInput [min]="minDate" [matDatepicker]="picker2" formControlName="fechaFin"
-                                            name="fechaFin" placeholder="Choose a date">
+                                        <input matInput [min]="minDate" [matDatepicker]="picker2"
+                                            formControlName="fechaFin" name="fechaFin" placeholder="Choose a date">
                                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                         <mat-datepicker touchUi #picker2></mat-datepicker>
                                         <mat-hint align="start">Fecha final para la notificación temporal</mat-hint>

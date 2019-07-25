@@ -26,13 +26,13 @@ export class AsadaService {
   }
 
   obtenerAsada(){
-    let url = URL_SERVICIOS + '/api/asada?token=' + this._usuarioService.token;
+    let url = URL_SERVICIOS + '/api/asada';
     return this.http.get(url);
   }
 
-  actualizarAsada(nombre:string, cedulaJuridica:string,  telefono:string, direccion:string, id:string){
+  actualizarAsada(nombre:string, cedulaJuridica:string,  telefono:string, direccion:string, id:string, correo:string){
     let url = URL_SERVICIOS + `/api/asada/${id}?token=` + this._usuarioService.token;
-    return this.http.put(url, {nombre, cedulaJuridica, telefono, direccion}).pipe(
+    return this.http.put(url, {nombre, cedulaJuridica, telefono, direccion, correo}).pipe(
       map(res=>{
         swal('Acción realizada!', 'ASADA actualizada correctamente', 'success');
         return true;

@@ -83,6 +83,7 @@ export class ConfiguracionComponent implements OnInit, OnDestroy {
         this.asadaForm.get('cedulaJuridica').setValue(res.asada.cedulaJuridica);
         this.asadaForm.get('telefono').setValue(res.asada.telefono);
         this.asadaForm.get('direccion').setValue(res.asada.direccion);
+        this.asadaForm.get('correo').setValue(res.asada.correo);
       })
     )
   }
@@ -239,7 +240,7 @@ export class ConfiguracionComponent implements OnInit, OnDestroy {
 
   guardarAsada(){
     this.subcripciones.push( this._asadaService.actualizarAsada(this.asadaForm.value.nombre, this.asadaForm.value.cedulaJuridica, 
-                                       this.asadaForm.value.telefono, this.asadaForm.value.direccion, this.asadaForm.value.id)
+                             this.asadaForm.value.telefono, this.asadaForm.value.direccion, this.asadaForm.value.id, this.asadaForm.value.correo)
         .subscribe(
           (res:any)=>{
             console.log(res);
@@ -302,6 +303,7 @@ export class ConfiguracionComponent implements OnInit, OnDestroy {
       nombre          : ['', [Validators.required]],
       cedulaJuridica  : ['', [Validators.required]],
       telefono        : ['', [Validators.required]],
+      correo          : ['', [Validators.required]],
       direccion       : ['', [Validators.required]]
     });
   }

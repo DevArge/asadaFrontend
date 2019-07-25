@@ -2,10 +2,10 @@
   <mat-grid-tile class="content-home">
     <h4 class="footer-title">Contactanos</h4>
     <p class="footer-text">
-      <mat-icon>local_phone</mat-icon> Número telefónico:
+      <mat-icon>local_phone</mat-icon> Número telefónico: <a href="tel:{{asada?.telefono}}">{{asada?.telefono}}</a>
     </p>
     <p class="footer-text">
-      <mat-icon>email</mat-icon> Correo electrónico:
+      <mat-icon>email</mat-icon> Correo electrónico: <a href="mailto:{{asada?.correo}}">{{asada?.correo}}</a>
     </p>
     <p class="footer-text">
       <mat-icon>location_on</mat-icon> Localización geográfica
@@ -20,19 +20,27 @@
     <h4 class="footer-title">
       <mat-icon>message</mat-icon> Deja aquí, tus comentarios o reportes:
     </h4>
-    <label class="label-form">Número de abonado:</label>
-    <input class="input-text" type="text">
-    <label class="label-form">Tu correo:</label>
-    <input class="input-text" type="text">
+    <label class="label-form">Nombre:</label>
+    <input class="input-text" type="text" [(ngModel)]="nombre">
+    <label class="label-form">Tu correo o número telefónico:</label>
+    <input class="input-text" type="text" [(ngModel)]="contacto">
     <label class="label-form">Mensaje:</label>
-    <textarea class="input-text" required="" rows="7" maxlength="800" style="resize: none;" name="contenido"
-      cols="50"></textarea>
-    <div class="btn-container"><a href="/consulta" class="btn-footer">CONSULTAR</a></div>
+    <textarea class="input-text" required="" rows="7" maxlength="800" style="resize: none;" name="contenido" cols="50"
+      [(ngModel)]="mensaje"></textarea>
+    <div class="btn-container">
+      <button [disabled]="!validar()" [ngClass]="{'btn-footer': validar()}"
+        class="btn-disabled" (click)="enviar()">ENVIAR</button>
+        <br><br>
+        <div class="loader" *ngIf="estaCargando">
+            <mat-spinner color="accent" [diameter]="20"></mat-spinner>   
+        </div>
+    </div>
   </mat-grid-tile>
 </mat-grid-list>
 <mat-grid-list cols="1" rowHeight="70px" class="primary-900-bg">
   <mat-grid-tile class="content-home">
-      <div class="btn-container"><span class="copyright-text">© copyright 2019 Sistema de Asadas Comunales. - All Rights Reserved</span></div>
+    <div class="btn-container"><span class="copyright-text">© copyright 2019 Sistema de Asadas Comunales. - All Rights
+        Reserved</span></div>
   </mat-grid-tile>
 </mat-grid-list>
 <br><br><br>

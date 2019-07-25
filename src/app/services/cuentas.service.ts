@@ -94,5 +94,9 @@ export class CuentasService {
     window.open(URL_SERVICIOS + '/reporte/excel/'+ periodo + '?token=' + this._usuarioService.token);
   }
 
+  generarReporte(id:string, fechaInicio:string, fechaFin:string){
+    window.open(URL_SERVICIOS + `/reporte/excel/cuenta/${id}/${fechaInicio}/${fechaFin}?token=` + this._usuarioService.token);   
+  }
+
 
 }

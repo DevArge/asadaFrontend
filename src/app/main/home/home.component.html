@@ -1,5 +1,4 @@
 <div class="page-layout simple fullwidth">
-<<<<<<< HEAD
     <div style="height: 100vh;">
 
         <mat-toolbar class="fuse-white-bg">
@@ -57,7 +56,7 @@
                         <h2 class="home-title consultar-title">Consulta tus recibos</h2>
                         <p style="text-align: center;">En este apartado podras consultar tus recibos pendientes y los de
                             periodos anteriores.</p>
-                        <div class="btn-container"><a href="/consulta" class="btn-consultar">CONSULTAR</a></div>
+                        <div class="btn-container"><a routerLink="/consulta" class="btn-consultar">CONSULTAR</a></div>
                     </mat-grid-tile>
                 </mat-grid-list>
                 <mat-grid-list cols="2" rowHeight="450px">
@@ -105,16 +104,16 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <p class="precio-table"><b>₡150</b></p>
+                                        <p class="precio-table"><b>₡{{precios?.unoAdiez}}</b></p>
                                     </td>
                                     <td>
-                                        <p class="precio-table"><b>₡150</b></p>
+                                        <p class="precio-table"><b>₡{{precios?.onceAtreinta}}</b></p>
                                     </td>
                                     <td>
-                                        <p class="precio-table"><b>₡200</b></p>
+                                        <p class="precio-table"><b>₡{{precios?.treintaYunoAsecenta}}</b></p>
                                     </td>
                                     <td>
-                                        <p class="precio-table-last"><b>₡200</b></p>
+                                        <p class="precio-table-last"><b>₡{{precios?.masDeSecenta}}</b></p>
                                     </td>
                                 </tr>
                             </tbody>

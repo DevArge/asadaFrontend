@@ -39,7 +39,7 @@
     text-align: center;
 }
 
-.btn-footer{
+.btn-footer, .btn-disabled{
     border: 3px solid #fff;
     color: #fff !important;
     background-color: transparent;
@@ -61,6 +61,7 @@
     color: #262933 !important;
     background-color: #fff;
     text-decoration: none !important;
+    cursor: pointer;
 }
 
 .label-form{
@@ -73,4 +74,13 @@
     color: #fff;
     font-size: 15px;
     text-align: center;
+}
+
+.loader{
+    display: block;
+    width: 100%;
+}
+
+.loader mat-spinner{
+    margin: auto;
 }

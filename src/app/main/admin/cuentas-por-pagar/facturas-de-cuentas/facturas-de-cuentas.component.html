@@ -31,12 +31,18 @@
       </div>
       <!-- / SEARCH -->
 
-      <!-- ADD BUTTON -->
-      <button mat-raised-button (click)="AgregarFactura()" class="add-product-button fuse-white mt-24 mt-md-0">
-        <mat-icon>person_add</mat-icon>
-        <span> Factura</span>
-      </button>
-      <!-- / ADD BUTTON -->
+      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+          <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+            <mat-menu #appMenu="matMenu">
+              <button mat-menu-item (click)="AgregarFactura()">Crear Factura</button>
+              <button mat-menu-item (click)="exportar()">Exportar a excel</button>
+            </mat-menu>
+  
+            <button mat-icon-button [matMenuTriggerFor]="appMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </span>
+        </div>
 
     </div>
     <!-- / HEADER -->

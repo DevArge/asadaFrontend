@@ -77,7 +77,7 @@
         <!-- Progress Column -->
         <ng-container matColumnDef="role">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Role </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.role}} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{row.role | role}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>

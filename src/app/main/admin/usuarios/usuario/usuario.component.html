@@ -39,7 +39,7 @@
                     <mat-label>Role:</mat-label>
                     <mat-select formControlName="role" placeholder="Seleccione una opción" [value]="usuario.role">
                         <mat-option *ngFor="let role of roles" [value]="role">
-                            {{role}}
+                            {{role | role}}
                         </mat-option>
                     </mat-select>
                     <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
