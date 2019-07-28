@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, HostListener } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations/index';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { Recibo } from '../../models/Recibo.model';
 import { Subscription } from 'rxjs';
 import { ReciboService } from '../../services/recibo.service';
-import { MatTableDataSource } from '@angular/material';
-import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-consulta',
@@ -21,6 +19,7 @@ export class ConsultaComponent implements OnInit {
   noHayRecibos:any[]=[{mensaje:'No hay recibos pendientes'}];
   columnaNoHay:string[]=['noHay'];
   columnaRecibos: string[] = ['medidor','periodo', 'metros', 'consumo','cargoFijo', 'hidrante', 'otros', 'total', 'estado'];
+  columnaRecibos2: string[] = ['medidor','periodo', 'total', 'estado'];
   estaCargando: boolean = false;
   huboErrorAlcargar: boolean = false;
   error:string;
@@ -36,6 +35,7 @@ export class ConsultaComponent implements OnInit {
   cedulaAbonado:string;
   subcripciones:Subscription[] = []; 
   usuario:String;
+  widthWindow:number;
 
   constructor(private _fuseConfigService: FuseConfigService, private _reciboService:ReciboService) { 
     this._fuseConfigService.config = {
@@ -43,9 +43,21 @@ export class ConsultaComponent implements OnInit {
           style:'vertical-layout-2',
       }
     };
+    
   }
 
   ngOnInit() {
+    this.onResize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?){
+    if (event) {
+      this.widthWindow = event.target.innerWidth; 
+    }else{
+      this.widthWindow = window.innerWidth;
+    }
+    console.log("Width: " + this.widthWindow);
   }
 
   cargarRecibos(){
