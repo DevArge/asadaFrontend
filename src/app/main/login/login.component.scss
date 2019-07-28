@@ -157,3 +157,15 @@
             }
         }
     }
+
+@media(max-width:480px){
+    #login #login-form-wrapper #login-form{
+        max-width: 320px;
+    }
+}
+
+@media screen and (max-width: 320px){
+    #login #login-form-wrapper {
+        padding: 0;
+    }
+}
