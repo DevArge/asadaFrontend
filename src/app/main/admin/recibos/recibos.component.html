@@ -3,13 +3,13 @@
     <!-- TOP BACKGROUND -->
     <div class="top-bg accent"></div>
     <!-- / TOP BACKGROUND -->
-  
+
     <!-- CENTER -->
     <div class="center">
-  
+
       <!-- HEADER -->
       <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
-  
+
         <!-- APP TITLE -->
         <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
           <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/admin/seleccionar-periodo/recibos'">
@@ -21,7 +21,7 @@
           </span>
         </div>
         <!-- / APP TITLE -->
-  
+
         <!-- SEARCH -->
         <div class="search-wrapper mx-32 mx-md-0">
           <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
@@ -30,68 +30,68 @@
           </div>
         </div>
         <!-- / SEARCH -->
-  
+
         <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
           <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
             <mat-menu #appMenu="matMenu">
               <button mat-menu-item (click)="exportarExcel()">Exportar a excel</button>
               <button mat-menu-item *ngIf="fechaVencimiento != null" (click)="cambiarFechaVencimiento()">Cambiar fecha de vencimiento</button>
             </mat-menu>
-  
+
             <button mat-icon-button [matMenuTriggerFor]="appMenu">
               <mat-icon>more_vert</mat-icon>
             </button>
           </span>
         </div>
-  
+
       </div>
       <!-- / HEADER -->
-  
-  
-  
+
+
+
       <!-- CONTENT CARD -->
       <div class="content-card">
-  
+
         <div class="background-loader" *ngIf="estaCargando || huboErrorAlcargar">
           <mat-spinner *ngIf="estaCargando" color="accent"></mat-spinner>
           <div class="limit-time-error" *ngIf="huboErrorAlcargar">
             Hubo un Error al cargar la información.
           </div>
         </div>
-  
+
         <mat-table [dataSource]="dataSource" matSort fusePerfectScrollbar [@animateStagger]="{value:'50'}"
           (matSortChange)="ordenarColumna($event)">
-  
+
           <!-- Name Column -->
           <ng-container matColumnDef="nombre">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
           </ng-container>
-  
+
           <!-- Progress Column -->
           <ng-container matColumnDef="apellido1">
             <mat-header-cell *matHeaderCellDef mat-sort-header> 1er Apellido </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.apellido1}} </mat-cell>
           </ng-container>
-  
+
           <!-- Progress Column -->
           <ng-container matColumnDef="apellido2">
             <mat-header-cell *matHeaderCellDef mat-sort-header> 2do Apellido </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.apellido2}} </mat-cell>
           </ng-container>
-  
+
           <!-- Color Column -->
           <ng-container matColumnDef="detalle">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Detalle </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.detalle}} </mat-cell>
           </ng-container>
-  
+
           <!-- Color Column -->
           <ng-container matColumnDef="medidor">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Medidor </mat-header-cell>
             <mat-cell *matCellDef="let row"> #{{row.medidor}} </mat-cell>
           </ng-container>
-  
+
           <!-- Color Column -->
           <ng-container matColumnDef="total">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Total</mat-header-cell>
@@ -101,14 +101,17 @@
           <!-- Color Column -->
           <ng-container matColumnDef="estado">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Estado</mat-header-cell>
-            <mat-cell *matCellDef="let row"> 
-              <mat-icon [ngClass]="{'red-800-fg': row.estado == 'PENDIENTE'}" 
+            <mat-cell *matCellDef="let row">
+              <mat-icon [ngClass]="{'red-800-fg': row.estado == 'PENDIENTE'}"
                         *ngIf="row.estado == 'PENDIENTE'">info</mat-icon>
-              {{row.estado}}
+              <span *ngIf="row.estado == 'PAGADO'"
+                [ngClass]="{'green-500-fg': row.estado == 'PAGADO'}">{{row.estado}}</span>
+              <span *ngIf="row.estado == 'PENDIENTE'"
+                [ngClass]="{'red-500-fg': row.estado == 'PENDIENTE'}">{{row.estado}}</span>
             </mat-cell>
           </ng-container>
 
-  
+
           <!-- Buttons Column -->
           <ng-container matColumnDef="acciones">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -120,26 +123,26 @@
                     </button>
                     <mat-menu #moreMenu="matMenu">
                         <button mat-menu-item aria-label="remove" (click)="generarPdf(row)">
-                            <mat-icon>get_app</mat-icon> 
+                            <mat-icon>get_app</mat-icon>
                             <span>Generar Recibo</span>
                         </button>
                         <button mat-menu-item aria-label="remove" (click)="eliminarRecibo(row)">
-                          <mat-icon>delete</mat-icon> 
+                          <mat-icon>delete</mat-icon>
                           <span>Eliminar recibo</span>
                       </button>
                     </mat-menu>
                 </div>
             </mat-cell>
         </ng-container>
-  
+
           <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" 
-                    class="contact" 
-                    matRipple 
+          <mat-row *matRowDef="let row; columns: displayedColumns;"
+                    class="contact"
+                    matRipple
                     (click)="verDetalle(row)"
                     [@animate]="{value:'*',params:{y:'100%'}}"></mat-row>
         </mat-table>
-  
+
         <div class="example-button-row">
           <button mat-button color="primary" [disabled]="desde == 0 || estaCargando" (click)="paginaAnterior()">
             <mat-icon>arrow_back_ios</mat-icon>Anterior

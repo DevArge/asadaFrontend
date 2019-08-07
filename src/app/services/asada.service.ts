@@ -16,7 +16,7 @@ export class AsadaService {
   telefono:string;
   direccion:string
 
-  constructor(private http:HttpClient, private _usuarioService:UsuarioService) { 
+  constructor(private http:HttpClient, private _usuarioService:UsuarioService) {
     this.obtenerAsada().subscribe((res:any)=>{
       this.nombre = res.asada.nombre;
       this.cedulaJuridica = res.asada.cedulaJuridica;

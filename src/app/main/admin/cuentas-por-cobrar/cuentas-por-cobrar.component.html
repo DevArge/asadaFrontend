@@ -23,7 +23,7 @@
 
     <mat-chip-list class="mat-chip-list-stacked">
       <mat-chip selected color="primary">
-        <span class="texto-centrado">TOTALES GENERALES</span>
+        <span class="texto-centrado">TOTAL GENERAL</span>
       </mat-chip>
     </mat-chip-list>
 
@@ -70,6 +70,77 @@
 
     <mat-chip-list class="mat-chip-list-stacked">
       <mat-chip selected color="primary">
+        <span class="texto-centrado">TOTAL RECAUDADO</span>
+      </mat-chip>
+    </mat-chip-list>
+
+    <br>
+
+    <table mat-table [dataSource]="cuentasRecaudadas" class="mat-elevation-z8">
+      <ng-container matColumnDef="abonoMedidor">
+        <th mat-header-cell *matHeaderCellDef> Abonos de medidores </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.abonoMedidor">₡{{element.abonoMedidor}}</span>
+          <span *ngIf="!element.abonoMedidor">₡0</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="cargoFijo">
+        <th mat-header-cell *matHeaderCellDef> Cargos fijos </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.cargoFijo"> ₡{{element.cargoFijo}}</span>
+          <span *ngIf="!element.cargoFijo"> ₡0</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="consumo">
+        <th mat-header-cell *matHeaderCellDef> Consumos </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.consumo">₡{{element.consumo}}</span>
+          <span *ngIf="!element.consumo">₡0</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="hidrante">
+        <th mat-header-cell *matHeaderCellDef> Hidrantes </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.hidrante">₡{{element.hidrante}}</span>
+          <span *ngIf="!element.hidrante">₡0</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="reactivacionMedidor">
+        <th mat-header-cell *matHeaderCellDef> Reactivaciones </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.reactivacionMedidor">₡{{element.reactivacionMedidor}}</span>
+          <span *ngIf="!element.reactivacionMedidor">₡0</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="reparacion">
+        <th mat-header-cell *matHeaderCellDef> Reparaciones </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.reparacion">₡{{element.reparacion}} </span>
+          <span *ngIf="!element.reparacion">₡0 </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="retrasoPago">
+        <th mat-header-cell *matHeaderCellDef> Impuesto retrasos </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.retrasoPago">₡{{element.retrasoPago}}</span>
+          <span *ngIf="!element.retrasoPago">₡0</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> Total general </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element.total">₡{{element.total}}</span>
+          <span *ngIf="!element.total">₡0</span>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnasCuentas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasCuentas;"></tr>
+    </table>
+
+    <br>
+
+    <mat-chip-list class="mat-chip-list-stacked">
+      <mat-chip selected color="primary">
         <span class="texto-centrado">DETALLE DE RECIBOS</span>
       </mat-chip>
     </mat-chip-list>
@@ -106,7 +177,7 @@
         <td mat-cell *matCellDef="let row"> ₡{{row.hidrante}} </td>
       </ng-container>
 
-      <!-- Symbol Column -->  
+      <!-- Symbol Column -->
       <ng-container matColumnDef="consumo">
         <th mat-header-cell *matHeaderCellDef> Consumo </th>
         <td mat-cell *matCellDef="let row"> ₡{{row.valorMetro * row.metros}} </td>
@@ -129,19 +200,19 @@
     </table>
 
     <div class="example-button-row">
-      <button mat-button color="primary" 
+      <button mat-button color="primary"
               [disabled]="desde == 0 || estaCargando"
               (click)="paginaAnterior()"><mat-icon>arrow_back_ios</mat-icon>Anterior</button>
-      <button mat-button color="primary"  
+      <button mat-button color="primary"
               [disabled]="(desde + recibos.length) == total || estaCargando"
               (click)="paginaSiguiente()">Siguiente<mat-icon>arrow_forward_ios</mat-icon></button>
       Registros por página:
-      <mat-form-field> 
+      <mat-form-field>
           <mat-select #select [ngModel]="cantidad" (selectionChange)="tamanioPagina(select)">
               <mat-option [value]="10">10</mat-option>
               <mat-option [value]="50">50</mat-option>
               <mat-option [value]="100">100</mat-option>
-          </mat-select> 
+          </mat-select>
       </mat-form-field>
       mostrando {{desde +1}} - {{desde + recibos.length}} de {{total}}
   </div>

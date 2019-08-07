@@ -19,7 +19,7 @@ export class PeriodoComponent implements OnInit {
   ruta:string;
   subscribe:Subscription;
 
-  constructor(private _formBuilder: FormBuilder, private route:ActivatedRoute, private router:Router) { 
+  constructor(private _formBuilder: FormBuilder, private route:ActivatedRoute, private router:Router) {
     this.periodoForm = this.createForm();
     this.obtenerAnios();
     this.subscribe = this.route.params.subscribe( params => this.ruta = params.ruta );
@@ -29,7 +29,7 @@ export class PeriodoComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.subscribe.unsubscribe();    
+    this.subscribe.unsubscribe();
   }
 
   createForm():FormGroup{
@@ -41,7 +41,7 @@ export class PeriodoComponent implements OnInit {
 
   obtenerAnios(){
     let anioFin = new Date().getFullYear()
-    for (let i = 2018; i <= anioFin; i++) {
+    for (let i = 2019; i <= anioFin; i++) {
       this.anio.push(i);
     }
   }
@@ -51,13 +51,13 @@ export class PeriodoComponent implements OnInit {
     if (this.ruta == 'lecturas') {
       this.router.navigate(['admin/lecturas/ingresar/' + periodo])
     }else if (this.ruta == 'lecturas-todas') {
-      this.router.navigate(['admin/lecturas/' + periodo]); 
+      this.router.navigate(['admin/lecturas/' + periodo]);
     }else if (this.ruta == 'recibos') {
-      this.router.navigate(['admin/recibos/' + periodo]);       
+      this.router.navigate(['admin/recibos/' + periodo]);
     }else if(this.ruta == 'cuentas'){
       this.router.navigate(['admin/cuentas-por-cobrar/' + periodo]);
     }else{
-      this.router.navigate(['admin/']); 
+      this.router.navigate(['admin/']);
     }
   }
 

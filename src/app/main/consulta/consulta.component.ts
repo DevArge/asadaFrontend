@@ -57,7 +57,6 @@ export class ConsultaComponent implements OnInit {
     }else{
       this.widthWindow = window.innerWidth;
     }
-    console.log("Width: " + this.widthWindow);
   }
 
   cargarRecibos(){

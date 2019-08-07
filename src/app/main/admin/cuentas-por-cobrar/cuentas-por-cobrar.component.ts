@@ -35,6 +35,7 @@ export class CuentasPorCobrarComponent implements OnInit, OnDestroy {
   ];
   recibos:any[]=[];
   cuentas:string [];
+  cuentasRecaudadas:string [];
   desde:number = 0;
   cantidad:number = 10;
   columna:string = 'id';
@@ -45,15 +46,15 @@ export class CuentasPorCobrarComponent implements OnInit, OnDestroy {
   termino = new Subject<string>();
   subcripciones:Subscription [] =[];
 
-  constructor(private _cuentasService:CuentasService, private router:Router, private route:ActivatedRoute, 
-              private _reciboService:ReciboService) { 
+  constructor(private _cuentasService:CuentasService, private router:Router, private route:ActivatedRoute,
+              private _reciboService:ReciboService) {
     this.route.params.subscribe(params => this.periodo = params.periodo);
     if (!this.periodo) {
       this.router.navigate(['admin/seleccionar-periodo/cuentas']);
     }
     this.buscar();
   }
-  
+
   ngOnInit() {
     this.obtenerCuentas();
   }
@@ -66,6 +67,7 @@ export class CuentasPorCobrarComponent implements OnInit, OnDestroy {
     this.estaCargando = true;
     this.subcripciones.push( this._cuentasService.cuentasPorCobrar(this.desde,this.cantidad, this.columna, this.orden, this.periodo).subscribe((res:any)=>{
         this.cuentas = res.cuentas;
+        this.cuentasRecaudadas = res.cuentasRecaudadas;
         this.recibos = res.recibos;
         this.total = res.total;
         this.estaCargando = false;
@@ -81,7 +83,7 @@ export class CuentasPorCobrarComponent implements OnInit, OnDestroy {
     this._cuentasService.exportarExcel(this.periodo);
   }
 
-  
+
   ///==================== TABLA =================//
 
   buscar(){

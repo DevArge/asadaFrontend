@@ -15,7 +15,7 @@ const MY_FORMATS = {
     dateInput: 'LL',
   },
   display: {
-    dateInput: 'YYYY-MM-DD',  
+    dateInput: 'YYYY-MM-DD',
     monthYearLabel: 'YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'YYYY',
@@ -40,12 +40,12 @@ export class FacturaComponent implements OnInit, OnDestroy {
   cantidad:number;
   totalProduto:number;
   cuentas:Cuenta[]=[];
-  estaCargando: boolean = true;
+  estaCargando: boolean;
   huboErrorAlcargar: boolean = false;
   subscripciones:Subscription[]=[];
 
-  constructor(private _formBuilder: FormBuilder, 
-              private _facturaService:FacturaService, 
+  constructor(private _formBuilder: FormBuilder,
+              private _facturaService:FacturaService,
               public _cuentaService:CuentasService,
               private router:Router,
               private route:ActivatedRoute) {
@@ -71,14 +71,15 @@ export class FacturaComponent implements OnInit, OnDestroy {
   }
 
   cargarFactura(id:any){
+    this.estaCargando = true; 
     this.subscripciones.push( this._facturaService.obtenerFactura(id).subscribe(
       (res:any)=>{
         this.factura = res.factura;
         this.facturaForm = this.createFacturaForm();
-        this.estaCargando = false;        
+        this.estaCargando = false;
       },err=>{
         this.huboErrorAlcargar = true;
-        this.estaCargando = false;        
+        this.estaCargando = false;
       }
     ))
   }
@@ -154,7 +155,7 @@ export class FacturaComponent implements OnInit, OnDestroy {
         invalido = true;
         break;
       }
-      
+
     }
     return invalido
   }

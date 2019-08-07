@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { map, catchError } from 'rxjs/operators';
 import { URL_SERVICIOS } from '../config/config';
 import { throwError } from 'rxjs';
@@ -11,7 +11,7 @@ import { isObject } from 'util';
 @Injectable({
   providedIn: 'root'
 })
-export class ConfiguracionService implements OnInit {
+export class ConfiguracionService {
 
   idConfiguracionRecibo:string;
   impuestoRetraso:number;
@@ -20,11 +20,7 @@ export class ConfiguracionService implements OnInit {
   fechaInicio:Date;
   fechaFin:Date;
 
-  constructor(private http:HttpClient, private _usuarioService:UsuarioService) { 
-
-  }
-
-  ngOnInit(): void {
+  constructor(private http:HttpClient, private _usuarioService:UsuarioService) {
     this.obtenerConfiguracion().subscribe((res:any)=>{
       this.idConfiguracionRecibo = res.configuracion.id;
       this.impuestoRetraso = res.configuracion.impuestoRetraso;
@@ -33,7 +29,6 @@ export class ConfiguracionService implements OnInit {
       this.fechaInicio = res.configuracion.fechaInicio;
       this.fechaFin = res.configuracion.fechaFin;
     })
-    
   }
 
   ///// PRECIOS ////
@@ -62,7 +57,7 @@ export class ConfiguracionService implements OnInit {
   ////// RECIBOS ////
   obtenerConfiguracion(){
     let url = URL_SERVICIOS + '/api/configuracion-recibos?token=' + this._usuarioService.token;
-    return this.http.get(url); 
+    return this.http.get(url);
   }
 
   actualizarConfiguracion(idConfig:number, notificacion:string, notificacionDefault:string, fechaInicio:any,fechaFin:any){
