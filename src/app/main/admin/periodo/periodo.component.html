@@ -16,8 +16,8 @@
                         <mat-form-field appearance="outline" class="bloque">
                             <mat-label>Seleccione el Mes</mat-label>
                             <mat-icon matSuffix class="secondary-text">calendar_today</mat-icon>
-                            <mat-select #select name="mes" formControlName="mes">
-                                <mat-option *ngFor="let valor of mes; let i = index" [value]="i+1">{{valor}}</mat-option>
+                            <mat-select #select name="meses" formControlName="meses">
+                                <mat-option *ngFor="let mes of meses" [value]="mes.valor">{{mes.nombre}}</mat-option>
                             </mat-select>
                             <mat-error>El Mes es requerido!</mat-error>
                         </mat-form-field>

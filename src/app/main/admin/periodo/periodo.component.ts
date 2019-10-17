@@ -13,7 +13,20 @@ import { Subscription } from 'rxjs';
 })
 export class PeriodoComponent implements OnInit {
 
-  mes:string [] =["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  meses:any [] =[
+  { nombre : "Enero", valor: '01' },
+  { nombre : "Febrero", valor: '02' },
+  { nombre : "Marzo", valor: '03' },
+  { nombre : "Abril", valor: '04' },
+  { nombre : "Mayo", valor: '05' },
+  { nombre : "Junio",  valor: '06' },
+  { nombre : "Julio",  valor: '07' },
+  { nombre : "Agosto", valor: '08' },
+  { nombre : "Septiembre", valor: '09' },
+  { nombre : "Octubre", valor: '10' },
+  { nombre : "Noviembre", valor: '1' },
+  { nombre : "Diciembre", valor: '12' }
+  ];
   anio:any[] = [];
   periodoForm:FormGroup;
   ruta:string;
@@ -34,7 +47,7 @@ export class PeriodoComponent implements OnInit {
 
   createForm():FormGroup{
     return this._formBuilder.group({
-      mes:['', [Validators.required]],
+      meses:['', [Validators.required]],
       anio:['', [Validators.required]]
     });
   }
@@ -47,7 +60,7 @@ export class PeriodoComponent implements OnInit {
   }
 
   enviarPeriodo(){
-    let periodo = this.periodoForm.value.anio + '-' + this.periodoForm.value.mes;
+    let periodo = this.periodoForm.value.anio + '-' + this.periodoForm.value.meses;
     if (this.ruta == 'lecturas') {
       this.router.navigate(['admin/lecturas/ingresar/' + periodo])
     }else if (this.ruta == 'lecturas-todas') {
