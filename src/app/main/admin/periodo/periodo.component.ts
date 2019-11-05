@@ -24,7 +24,7 @@ export class PeriodoComponent implements OnInit {
   { nombre : "Agosto", valor: '08' },
   { nombre : "Septiembre", valor: '09' },
   { nombre : "Octubre", valor: '10' },
-  { nombre : "Noviembre", valor: '1' },
+  { nombre : "Noviembre", valor: '11' },
   { nombre : "Diciembre", valor: '12' }
   ];
   anio:any[] = [];
