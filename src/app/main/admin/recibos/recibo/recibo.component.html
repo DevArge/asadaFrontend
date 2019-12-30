@@ -47,7 +47,7 @@
 
                                 <div class="due-date" fxLayout="row" fxLayoutAlign="start center">
                                     <span class="title">Medidor:</span>
-                                    <span class="date">#{{recibo.medidor + ' ' + recibo.detalle}}</span>
+                                    <span class="date">#{{recibo.medidor}} <span *ngIf="recibo.detalle">{{recibo.detalle}}</span></span>
                                 </div>
                                 <div class="due-date" fxLayout="row" fxLayoutAlign="start center">
                                     <span class="title">Abonado:</span>

@@ -62,7 +62,6 @@ export class LecturasComponent implements OnInit, OnDestroy {
     )
   }
 
-
   ///==================== TABLA =================//
 
   buscarLectura(){

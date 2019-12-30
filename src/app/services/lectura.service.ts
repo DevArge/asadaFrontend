@@ -14,7 +14,7 @@ export class LecturaService {
   constructor(private http:HttpClient, private _usuarioService:UsuarioService) { }
 
   obtenerInsertarLecturas(desde:number, cantidad:number, columna:string, orden:string, periodo:string){
-    let url = URL_SERVICIOS + `/api/insertar-lecturas?periodo=${periodo}&desde=${desde}&cantidad=${cantidad}&columna=${columna}&orden=${orden}&token=${this._usuarioService.token}`;
+    let url = URL_SERVICIOS + `/api/insertar-lecturas?periodo=${periodo}&desde=${desde}&cantidad=${cantidad}&columna=${columna}&orden=${orden}&token=${this._usuarioService.token}`;    
     return this.http.get(url); 
   }
 

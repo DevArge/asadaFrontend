@@ -65,6 +65,7 @@
               class="mr-8"
               (click)="matDialogRef.close(['eliminar',usuarioForm])"
               aria-label="Delete"
+              [disabled]="usuario.id == 1"
               matTooltip="Delete">
           ELIMINAR
       </button>

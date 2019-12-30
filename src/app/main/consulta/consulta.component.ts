@@ -31,10 +31,10 @@ export class ConsultaComponent implements OnInit {
   orden: string = 'asc';
   total: number = 0;
   idAbonado:string;
+  idAbonadoRes:string;
 
   cedulaAbonado:string;
   subcripciones:Subscription[] = []; 
-  usuario:String;
   widthWindow:number;
 
   constructor(private _fuseConfigService: FuseConfigService, private _reciboService:ReciboService) { 
@@ -61,21 +61,19 @@ export class ConsultaComponent implements OnInit {
 
   cargarRecibos(){
     this.estaCargando = true;
-    this.subcripciones.push(this._reciboService.cargarRecibosDeUnAbonado(this.desde, this.cantidad, this.columna, this.orden, this.idAbonado)
+    this.subcripciones.push(this._reciboService.cargarRecibosDeUnAbonado(this.desde, this.cantidad, this.columna, this.orden, this.idAbonadoRes)
       .subscribe(responseList => {
         this.recibos           = responseList[0].recibos;
         this.total             = responseList[0].total;
         this.recibosPendientes = responseList[1].recibos;
-        if (this.cedulaAbonado = responseList[0].recibos[0]) {
-          this.cedulaAbonado = responseList[0].recibos[0].cedula; 
-        }
+        this.cedulaAbonado = responseList[0].recibos[0].cedula;
         this.estaCargando = false;
         this.primeraCarga = false;
       }, err=>{
         if (err.status == 403) {
           this.error = err.error.message;
         }else{
-          this.error = "Hubo un error en el servidor";
+          this.error = "Ha ocurrido un error, por favor intentalo más tarde.";
         }
         this.huboErrorAlcargar = true;
         this.estaCargando = false;
@@ -88,6 +86,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   consultar(){
+    this.idAbonadoRes = this.idAbonado;
     this.huboErrorAlcargar = false;
     this.recibos = [];
     this.recibosPendientes = [];
@@ -95,8 +94,8 @@ export class ConsultaComponent implements OnInit {
     this.idAbonado = '';
   }
 
-  verificar(){
-    return false;
+  ngOnDestroy() {
+    this.subcripciones.forEach(sub => sub.unsubscribe());
   }
 
   
@@ -129,7 +128,5 @@ export class ConsultaComponent implements OnInit {
     this.cantidad = valor._value;
     this.cargarRecibos();
   }
-
-
 
 }
