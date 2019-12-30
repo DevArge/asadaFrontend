@@ -38,7 +38,7 @@ export class CuentaComponent{
       nombre: [this.cuenta.nombre, [Validators.required]],
       tipo: [this.cuenta.tipo, [Validators.required]],
       presupuesto: [this.cuenta.presupuesto, [Validators.required]],
-      descripcion: [this.cuenta.descripcion, [Validators.required]]
+      description: [this.cuenta.description, [Validators.required]]
     });
   }
 }

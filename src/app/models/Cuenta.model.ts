@@ -4,7 +4,7 @@ export class Cuenta{
                 public id:String,
                 public codigo:String,
                 public nombre: String,
-                public descripcion: String,
+                public description: String,
                 public tipo: String,
                 public presupuesto?: String,
                 ){ }
